@@ -1,13 +1,35 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 
 export default function WhatsAppFloatButton() {
+  const [visible, setVisible] = useState(true);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    function handleScroll() {
+      setVisible(false);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setVisible(true), 250);
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   return (
     <Link
       href="https://wa.me/51976509570?text=Hola%2C%20quiero%20consultar%20sobre%20productos%20de%20limpieza"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Escribir por WhatsApp"
-      className="fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg hover:bg-emerald-600"
+      className={`fixed bottom-5 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg transition-all duration-300 hover:bg-emerald-600 ${
+        visible ? "scale-100 opacity-100" : "pointer-events-none scale-75 opacity-0"
+      }`}
     >
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" className="h-7 w-7">
         <path d="M16.001 2.667c-7.364 0-13.334 5.97-13.334 13.334 0 2.353.617 4.647 1.789 6.667L2.667 29.333l6.83-1.79a13.27 13.27 0 006.504 1.657h.006c7.364 0 13.334-5.97 13.334-13.333S23.365 2.667 16.001 2.667zm0 24.4a11.03 11.03 0 01-5.62-1.54l-.403-.24-4.053 1.062 1.082-3.951-.263-.406a11.05 11.05 0 01-1.7-5.897c0-6.108 4.97-11.078 11.079-11.078 2.96 0 5.742 1.153 7.834 3.246a11 11 0 013.244 7.834c0 6.108-4.97 11.078-11.1 11.078v-.108z" />
