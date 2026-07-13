@@ -18,15 +18,15 @@ export interface Product {
   image: string | null;
 }
 
-export const CATEGORIES: { id: Category; label: string }[] = [
-  { id: "detergentes", label: "Detergentes" },
-  { id: "papel-higienico", label: "Papel Higiénico" },
-  { id: "papel-toalla", label: "Papel Toalla" },
-  { id: "servilletas-panuelos", label: "Servilletas y Pañuelos" },
-  { id: "limpieza-bano-cocina", label: "Limpieza de Baño y Cocina" },
-  { id: "bolsas", label: "Bolsas" },
-  { id: "accesorios-limpieza", label: "Accesorios de Limpieza" },
-  { id: "lavavajilla", label: "Lavavajilla" },
+export const CATEGORIES: { id: Category; label: string; icon: string }[] = [
+  { id: "detergentes", label: "Detergentes", icon: "🧴" },
+  { id: "papel-higienico", label: "Papel Higiénico", icon: "🧻" },
+  { id: "papel-toalla", label: "Papel Toalla", icon: "🧺" },
+  { id: "servilletas-panuelos", label: "Servilletas y Pañuelos", icon: "🍽️" },
+  { id: "limpieza-bano-cocina", label: "Limpieza de Baño y Cocina", icon: "🚿" },
+  { id: "bolsas", label: "Bolsas", icon: "🛍️" },
+  { id: "accesorios-limpieza", label: "Accesorios de Limpieza", icon: "🧽" },
+  { id: "lavavajilla", label: "Lavavajilla", icon: "🫧" },
 ];
 
 const img = (slug: string) => `/images/products/${slug}.webp`;

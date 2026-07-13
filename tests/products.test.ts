@@ -31,4 +31,10 @@ describe("product catalog data", () => {
       }
     }
   });
+
+  it("every category has a non-empty icon", () => {
+    for (const category of CATEGORIES) {
+      expect(category.icon.length).toBeGreaterThan(0);
+    }
+  });
 });
