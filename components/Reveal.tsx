@@ -13,6 +13,7 @@ export default function Reveal({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
+  const [skipAnimation, setSkipAnimation] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion =
@@ -20,6 +21,7 @@ export default function Reveal({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion || typeof IntersectionObserver === "undefined") {
+      setSkipAnimation(true);
       setVisible(true);
       return;
     }
@@ -45,7 +47,7 @@ export default function Reveal({
     <div
       ref={ref}
       style={{ transitionDelay: visible ? `${delayMs}ms` : "0ms" }}
-      className={`transition-all duration-700 ${
+      className={`${skipAnimation ? "" : "transition-all duration-700"} ${
         visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
       } ${className}`}
     >
