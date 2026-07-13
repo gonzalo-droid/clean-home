@@ -5,21 +5,64 @@ export const metadata: Metadata = {
   description: "Conoce Clean Home: venta de productos de limpieza con atención y pedidos por WhatsApp.",
 };
 
+const VALUES = [
+  {
+    title: "Calidad",
+    description: "Trabajamos con marcas reconocidas en cada categoría de producto.",
+  },
+  {
+    title: "Confianza",
+    description: "Precios claros y sin sorpresas, confirmados antes de cada pedido.",
+  },
+  {
+    title: "Atención cercana",
+    description: "Coordinamos cada pedido directo por WhatsApp, de persona a persona.",
+  },
+  {
+    title: "Cumplimiento",
+    description: "Entregas puntuales y compromiso con lo acordado.",
+  },
+];
+
 export default function NosotrosPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12">
+    <div className="mx-auto max-w-4xl px-4 py-12">
       <h1 className="mb-4 text-2xl font-extrabold text-slate-800">Nosotros</h1>
-      <p className="mb-4 text-slate-600">
+      <p className="mb-10 text-slate-600">
         En Clean Home ofrecemos una amplia variedad de productos de limpieza para el hogar y
         negocios: detergentes, papel higiénico, papel toalla, bolsas, artículos de limpieza para
-        baño y cocina, y mucho más.
+        baño y cocina, y mucho más. Aceptamos pagos por Yape, transferencia o efectivo.
       </p>
-      <p className="mb-4 text-slate-600">
-        Trabajamos con marcas reconocidas y coordinamos cada pedido directamente por WhatsApp,
-        para que elijas tus productos, confirmes cantidades y precios, y definas la entrega sin
-        complicaciones.
-      </p>
-      <p className="text-slate-600">Aceptamos pagos por Yape, transferencia o efectivo.</p>
+
+      <div className="mb-10 grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-2 text-lg font-bold text-sky-600">Misión</h2>
+          <p className="text-sm text-slate-600">
+            Ofrecer productos de limpieza de calidad para el hogar y los negocios de nuestra
+            comunidad, con una atención cercana y pedidos simples a través de WhatsApp.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+          <h2 className="mb-2 text-lg font-bold text-sky-600">Visión</h2>
+          <p className="text-sm text-slate-600">
+            Ser la opción de confianza en productos de limpieza del barrio, reconocidos por la
+            calidad de nuestros productos y la rapidez en la atención.
+          </p>
+        </div>
+      </div>
+
+      <h2 className="mb-4 text-lg font-bold text-slate-800">Nuestros valores</h2>
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {VALUES.map((value) => (
+          <div
+            key={value.title}
+            className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
+          >
+            <h3 className="mb-1 text-sm font-bold text-sky-600">{value.title}</h3>
+            <p className="text-xs text-slate-600">{value.description}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
