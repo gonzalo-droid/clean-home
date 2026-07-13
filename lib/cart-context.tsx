@@ -36,6 +36,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const raw = window.localStorage.getItem(STORAGE_KEY);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe localStorage hydration on mount, not a synchronization anti-pattern: localStorage doesn't exist during SSR, so it can't be read in a lazy useState initializer without crashing/hydration mismatch.
       if (raw) setItems(JSON.parse(raw));
     } catch {
       // localStorage unavailable (e.g. private mode) — cart stays in-memory
