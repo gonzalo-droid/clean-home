@@ -41,7 +41,7 @@ export default function ProductCard({ product }: { product: Product }) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-4xl text-slate-300">
-            🧴
+            <span aria-hidden="true">🧴</span>
           </div>
         )}
       </div>
@@ -68,7 +68,7 @@ export default function ProductCard({ product }: { product: Product }) {
           type="button"
           onClick={() => setQuantity((q) => Math.max(1, q - 1))}
           className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
-          aria-label="Restar cantidad"
+          aria-label={`Restar cantidad de ${product.name}`}
         >
           −
         </button>
@@ -77,7 +77,7 @@ export default function ProductCard({ product }: { product: Product }) {
           type="button"
           onClick={() => setQuantity((q) => q + 1)}
           className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
-          aria-label="Sumar cantidad"
+          aria-label={`Sumar cantidad de ${product.name}`}
         >
           +
         </button>

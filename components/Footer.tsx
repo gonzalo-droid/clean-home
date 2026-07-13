@@ -12,6 +12,7 @@ export default function Footer() {
             <p className="mt-2">WhatsApp: 976 509 570</p>
             <p>Pedidos coordinados por WhatsApp</p>
             <p className="mt-2 text-xs text-slate-500">Lunes a sábado, 9am – 7pm</p>
+            <p className="text-xs text-slate-500">Atención solo por WhatsApp y delivery — sin tienda física.</p>
           </div>
           <div>
             <p className="font-semibold text-slate-800">Métodos de pago</p>
