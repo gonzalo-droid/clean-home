@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { buildWhatsAppOrderUrl, WHATSAPP_NUMBER } from "../lib/whatsapp";
+import { buildWhatsAppOrderUrl, buildContactMessageUrl, WHATSAPP_NUMBER } from "../lib/whatsapp";
 import type { CartLine } from "../lib/cart";
 
 const items: CartLine[] = [
@@ -43,5 +43,20 @@ describe("buildWhatsAppOrderUrl", () => {
     const decoded = decodeURIComponent(url.split("?text=")[1]);
     // 28 * 2 + 65 * 1 = 121
     expect(decoded).toContain("121.00");
+  });
+});
+
+describe("buildContactMessageUrl", () => {
+  it("targets the configured WhatsApp number", () => {
+    const url = buildContactMessageUrl("Ana", "999888777", "Quisiera cotizar un pedido grande");
+    expect(url).toContain(`https://wa.me/${WHATSAPP_NUMBER}?text=`);
+  });
+
+  it("url-encodes the message and includes name, phone, and message", () => {
+    const url = buildContactMessageUrl("Ana", "999888777", "Quisiera cotizar un pedido grande");
+    const decoded = decodeURIComponent(url.split("?text=")[1]);
+    expect(decoded).toContain("Ana");
+    expect(decoded).toContain("999888777");
+    expect(decoded).toContain("Quisiera cotizar un pedido grande");
   });
 });

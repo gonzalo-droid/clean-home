@@ -21,3 +21,9 @@ export function buildWhatsAppOrderUrl(items: CartLine[]): string {
 
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
+
+export function buildContactMessageUrl(name: string, phone: string, message: string): string {
+  const text = [`Hola, soy ${name} (tel: ${phone}).`, "", message].join("\n");
+
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
