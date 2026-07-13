@@ -33,6 +33,7 @@ export default function CategoryFilter({
               : "border border-slate-200 bg-white text-slate-600 hover:border-sky-300 hover:bg-sky-50"
           }`}
         >
+          <span className="mr-1">{cat.icon}</span>
           {cat.label}
         </button>
       ))}
