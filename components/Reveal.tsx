@@ -21,6 +21,7 @@ export default function Reveal({
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     if (prefersReducedMotion || typeof IntersectionObserver === "undefined") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- SSR-safe browser-capability check on mount, not a synchronization anti-pattern: matchMedia/IntersectionObserver don't exist during SSR, so this can't be done in a lazy useState initializer without a hydration mismatch.
       setSkipAnimation(true);
       setVisible(true);
       return;
