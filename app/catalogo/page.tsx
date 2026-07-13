@@ -8,11 +8,13 @@ export const metadata: Metadata = {
     "Explora todo el catálogo: detergentes, papel higiénico, papel toalla, servilletas, limpieza de baño y cocina, bolsas, accesorios y lavavajilla.",
 };
 
-export default function CatalogoPage({
+export default async function CatalogoPage({
   searchParams,
 }: {
-  searchParams: { categoria?: string };
+  searchParams: Promise<{ categoria?: string }>;
 }) {
+  const { categoria } = await searchParams;
+
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
@@ -38,7 +40,7 @@ export default function CatalogoPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }}
       />
-      <CatalogClient initialCategory={searchParams.categoria} />
+      <CatalogClient initialCategory={categoria} />
     </>
   );
 }
