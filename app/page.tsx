@@ -60,7 +60,9 @@ export default function HomePage() {
         <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 text-center text-white sm:grid-cols-4">
           {TRUST_HIGHLIGHTS.map((item) => (
             <div key={item.text} className="flex flex-col items-center gap-2">
-              <span className="text-3xl">{item.icon}</span>
+              <span className="text-3xl" aria-hidden="true">
+                {item.icon}
+              </span>
               <span className="text-sm font-semibold">{item.text}</span>
             </div>
           ))}
@@ -77,7 +79,10 @@ export default function HomePage() {
                 href={`/catalogo?categoria=${cat.id}`}
                 className="flex flex-col items-center gap-2 rounded-2xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold text-slate-700 shadow-[0_4px_12px_-4px_rgba(2,132,199,0.15)] transition duration-200 hover:-translate-y-1 hover:border-sky-300 hover:text-sky-600 hover:shadow-[0_16px_30px_-10px_rgba(2,132,199,0.35)]"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-xl">
+                <span
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-xl"
+                  aria-hidden="true"
+                >
                   {cat.icon}
                 </span>
                 {cat.label}
