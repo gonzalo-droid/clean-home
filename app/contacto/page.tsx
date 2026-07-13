@@ -31,6 +31,14 @@ export default function ContactoPage() {
             </a>
 
             <div className="mt-6 border-t border-slate-100 pt-6 text-sm text-slate-600">
+              <p className="font-semibold text-slate-800">Horario de atención</p>
+              <p>Lunes a sábado, 9am – 7pm</p>
+              <p className="mt-1 text-xs text-slate-500">
+                Atención solo por WhatsApp y delivery — sin tienda física.
+              </p>
+            </div>
+
+            <div className="mt-6 border-t border-slate-100 pt-6 text-sm text-slate-600">
               <p className="font-semibold text-slate-800">Métodos de pago</p>
               <p>Yape · Transferencias · Efectivo</p>
             </div>
