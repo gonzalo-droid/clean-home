@@ -24,8 +24,8 @@ export default function ProductCard({ product }: { product: Product }) {
   }
 
   return (
-    <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
-      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-xl bg-slate-50">
+    <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_4px_12px_-4px_rgba(2,132,199,0.15)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_30px_-10px_rgba(2,132,199,0.35)]">
+      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-sky-50 to-sky-100/60">
         {product.image ? (
           <Image
             src={product.image}
@@ -63,7 +63,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <button
           type="button"
           onClick={handleAdd}
-          className="rounded-full bg-sky-500 px-3 py-1.5 text-xs font-bold text-white hover:bg-sky-600"
+          className="rounded-full bg-sky-500 px-3 py-1.5 text-xs font-bold text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)] transition hover:bg-sky-600"
         >
           Agregar
         </button>
