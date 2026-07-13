@@ -34,7 +34,12 @@ export default function CartDrawer() {
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {items.length === 0 ? (
-            <p className="text-sm text-slate-500">Aún no agregaste productos.</p>
+            <div className="flex flex-col items-center justify-center py-10 text-center">
+              <span className="mb-3 text-4xl" aria-hidden="true">
+                🛒
+              </span>
+              <p className="text-sm text-slate-500">Aún no agregaste productos.</p>
+            </div>
           ) : (
             <ul className="space-y-4">
               {items.map((item) => (
