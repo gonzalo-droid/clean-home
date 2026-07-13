@@ -21,10 +21,10 @@ export default function HomePage() {
 
   return (
     <div>
-      <section className="bg-gradient-to-b from-sky-50 to-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-16 text-center">
-          <h1 className="text-3xl font-extrabold text-slate-800 sm:text-4xl">
-            Productos de limpieza para tu hogar y negocio
+      <section className="bg-white">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-20 text-center">
+          <h1 className="text-4xl font-extrabold leading-tight text-slate-900 sm:text-6xl">
+            Limpieza <span className="text-sky-600">sin complicaciones</span>
           </h1>
           <p className="max-w-xl text-slate-600">
             Detergentes, papel higiénico, papel toalla, bolsas y accesorios. Arma tu pedido y
@@ -33,7 +33,7 @@ export default function HomePage() {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/catalogo"
-              className="rounded-full bg-sky-500 px-6 py-3 text-sm font-bold text-white hover:bg-sky-600"
+              className="rounded-full bg-sky-500 px-6 py-3 text-sm font-bold text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)] transition hover:-translate-y-0.5 hover:bg-sky-600"
             >
               Ver catálogo
             </Link>
@@ -56,7 +56,7 @@ export default function HomePage() {
             <Link
               key={cat.id}
               href={`/catalogo?categoria=${cat.id}`}
-              className="rounded-2xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold text-slate-700 shadow-sm hover:border-sky-300 hover:text-sky-600"
+              className="rounded-2xl border border-slate-200 bg-white p-4 text-center text-sm font-semibold text-slate-700 shadow-[0_4px_12px_-4px_rgba(2,132,199,0.15)] transition duration-200 hover:-translate-y-1 hover:border-sky-300 hover:text-sky-600 hover:shadow-[0_16px_30px_-10px_rgba(2,132,199,0.35)]"
             >
               {cat.label}
             </Link>
