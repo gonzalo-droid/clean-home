@@ -9,18 +9,23 @@ import { makeLineId } from "@/lib/cart";
 export default function ProductCard({ product }: { product: Product }) {
   const { add, showToast } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
+  const [quantity, setQuantity] = useState(1);
 
   function handleAdd() {
-    add({
-      lineId: makeLineId(product.id, variant),
-      productId: product.id,
-      name: product.name,
-      presentation: product.presentation,
-      variant,
-      price: product.price,
-      image: product.image,
-    });
+    add(
+      {
+        lineId: makeLineId(product.id, variant),
+        productId: product.id,
+        name: product.name,
+        presentation: product.presentation,
+        variant,
+        price: product.price,
+        image: product.image,
+      },
+      quantity
+    );
     showToast("Agregado al carrito");
+    setQuantity(1);
   }
 
   return (
@@ -57,6 +62,26 @@ export default function ProductCard({ product }: { product: Product }) {
           ))}
         </select>
       )}
+
+      <div className="mt-2 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+          className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
+          aria-label="Restar cantidad"
+        >
+          −
+        </button>
+        <span className="w-5 text-center text-xs font-semibold text-slate-700">{quantity}</span>
+        <button
+          type="button"
+          onClick={() => setQuantity((q) => q + 1)}
+          className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
+          aria-label="Sumar cantidad"
+        >
+          +
+        </button>
+      </div>
 
       <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3">
         <span className="text-base font-bold text-sky-600">S/{product.price.toFixed(2)}</span>
