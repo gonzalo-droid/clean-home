@@ -58,7 +58,7 @@ export default function ProductCard({ product }: { product: Product }) {
         </select>
       )}
 
-      <div className="mt-3 flex items-center justify-between">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <span className="text-base font-bold text-sky-600">S/{product.price.toFixed(2)}</span>
         <button
           type="button"
