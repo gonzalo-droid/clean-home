@@ -10,11 +10,11 @@ export default function CategoryFilter({
   onChange: (value: Category | "todas") => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
       <button
         type="button"
         onClick={() => onChange("todas")}
-        className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+        className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition ${
           active === "todas"
             ? "bg-sky-500 text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)]"
             : "border border-slate-200 bg-white text-slate-600 hover:border-sky-300 hover:bg-sky-50"
@@ -27,13 +27,15 @@ export default function CategoryFilter({
           key={cat.id}
           type="button"
           onClick={() => onChange(cat.id)}
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+          className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition ${
             active === cat.id
               ? "bg-sky-500 text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)]"
               : "border border-slate-200 bg-white text-slate-600 hover:border-sky-300 hover:bg-sky-50"
           }`}
         >
-          <span className="mr-1">{cat.icon}</span>
+          <span className="mr-1" aria-hidden="true">
+            {cat.icon}
+          </span>
           {cat.label}
         </button>
       ))}
