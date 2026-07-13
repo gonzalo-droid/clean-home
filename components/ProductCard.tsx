@@ -7,7 +7,7 @@ import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
 
 export default function ProductCard({ product }: { product: Product }) {
-  const { add, openCart } = useCart();
+  const { add, showToast } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
 
   function handleAdd() {
@@ -20,7 +20,7 @@ export default function ProductCard({ product }: { product: Product }) {
       price: product.price,
       image: product.image,
     });
-    openCart();
+    showToast("Agregado al carrito");
   }
 
   return (
