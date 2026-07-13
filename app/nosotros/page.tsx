@@ -8,18 +8,22 @@ export const metadata: Metadata = {
 const VALUES = [
   {
     title: "Calidad",
+    icon: "✅",
     description: "Trabajamos con marcas reconocidas en cada categoría de producto.",
   },
   {
     title: "Confianza",
+    icon: "🤝",
     description: "Precios claros y sin sorpresas, confirmados antes de cada pedido.",
   },
   {
     title: "Atención cercana",
+    icon: "💬",
     description: "Coordinamos cada pedido directo por WhatsApp, de persona a persona.",
   },
   {
     title: "Cumplimiento",
+    icon: "⏱️",
     description: "Entregas puntuales y compromiso con lo acordado.",
   },
 ];
@@ -58,6 +62,7 @@ export default function NosotrosPage() {
             key={value.title}
             className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md"
           >
+            <span className="mb-2 block text-2xl">{value.icon}</span>
             <h3 className="mb-1 text-sm font-bold text-sky-600">{value.title}</h3>
             <p className="text-xs text-slate-600">{value.description}</p>
           </div>
