@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import Logo from "./Logo";
+import SearchBox from "./SearchBox";
+import { CartIcon, CloseIcon, MenuIcon } from "./icons";
 
-const NAV_LINKS = [
-  { href: "/", label: "Inicio" },
+export const NAV_LINKS = [
   { href: "/catalogo", label: "Catálogo" },
+  { href: "/packs", label: "Packs" },
+  { href: "/mayoristas", label: "Mayoristas" },
   { href: "/nosotros", label: "Nosotros" },
   { href: "/contacto", label: "Contacto" },
 ];
@@ -14,82 +19,75 @@ const NAV_LINKS = [
 export default function Header() {
   const { count, toggleCart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-        <Link href="/" className="text-xl font-bold text-sky-600">
-          Clean Home
-        </Link>
+    <header className="sticky top-0 z-40 border-b border-linea bg-white/95 backdrop-blur">
+      <div className="container-page flex flex-wrap items-center gap-3 py-3 md:flex-nowrap md:gap-6">
+        <button
+          type="button"
+          onClick={() => setMenuOpen((v) => !v)}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          aria-expanded={menuOpen}
+          className="flex h-11 w-11 items-center justify-center rounded-full text-marino hover:bg-menta lg:hidden"
+        >
+          {menuOpen ? <CloseIcon className="h-6 w-6" /> : <MenuIcon className="h-6 w-6" />}
+        </button>
 
-        <nav className="hidden gap-6 md:flex">
+        <div className="flex-1 md:flex-none">
+          <Logo />
+        </div>
+
+        <SearchBox className="order-last w-full md:order-none md:max-w-sm md:flex-1" />
+
+        <nav aria-label="Principal" className="hidden items-center gap-5 lg:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-slate-600 hover:text-sky-600"
+              aria-current={isActive(link.href) ? "page" : undefined}
+              className={`text-[15px] font-medium transition hover:text-agua ${
+                isActive(link.href) ? "font-bold text-agua" : "text-grafito"
+              }`}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggleCart}
-            aria-label="Abrir carrito de pedido"
-            className="relative rounded-full p-2 text-slate-700 hover:bg-sky-50"
-          >
-            <CartIcon />
-            {count > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-xs font-bold text-white">
-                {count}
-              </span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setMenuOpen((v) => !v)}
-            aria-label="Abrir menú"
-            className="rounded-full p-2 text-slate-700 hover:bg-sky-50 md:hidden"
-          >
-            <MenuIcon />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={toggleCart}
+          aria-label={`Abrir carrito, ${count} productos`}
+          className="relative flex h-11 w-11 items-center justify-center rounded-full border border-linea bg-white text-marino transition hover:border-agua"
+        >
+          <CartIcon className="h-5 w-5" />
+          {count > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-limon px-1 text-xs font-bold text-marino">
+              {count}
+            </span>
+          )}
+        </button>
       </div>
 
       {menuOpen && (
-        <nav className="flex flex-col gap-1 border-t border-slate-200 bg-white px-4 py-3 md:hidden">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className="rounded px-2 py-2 text-sm font-medium text-slate-600 hover:bg-sky-50 hover:text-sky-600"
-            >
-              {link.label}
-            </Link>
-          ))}
+        <nav aria-label="Menú" className="border-t border-linea bg-white lg:hidden">
+          <div className="container-page flex flex-col py-2">
+            {[{ href: "/", label: "Inicio" }, ...NAV_LINKS].map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setMenuOpen(false)}
+                className="flex min-h-[44px] items-center rounded-xl px-3 text-[15px] font-medium text-grafito hover:bg-menta"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </nav>
       )}
     </header>
-  );
-}
-
-function CartIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-6 w-6">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.836l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 1.994-4.693 2.602-7.163.087-.352-.184-.687-.547-.687H5.106M7.5 14.25L5.106 5.25M7.5 14.25L5.25 3M9.75 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-    </svg>
-  );
-}
-
-function MenuIcon() {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-6 w-6">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
-    </svg>
   );
 }

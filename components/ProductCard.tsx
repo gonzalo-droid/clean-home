@@ -1,98 +1,87 @@
 "use client";
 
-import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import type { Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
+import { formatPrice } from "@/lib/format";
+import ProductImage from "./ProductImage";
+import { PlusIcon } from "./icons";
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product, badge }: { product: Product; badge?: string }) {
   const { add, showToast } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
-  const [quantity, setQuantity] = useState(1);
 
   function handleAdd() {
-    add(
-      {
-        lineId: makeLineId(product.id, variant),
-        productId: product.id,
-        name: product.name,
-        presentation: product.presentation,
-        variant,
-        price: product.price,
-        image: product.image,
-      },
-      quantity
-    );
-    showToast("Agregado al carrito");
-    setQuantity(1);
+    add({
+      lineId: makeLineId(product.id, variant),
+      productId: product.id,
+      name: product.name,
+      presentation: product.presentation,
+      variant,
+      price: product.price,
+      image: product.image,
+    });
+    showToast(`${product.name} agregado`);
   }
 
-  return (
-    <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_4px_12px_-4px_rgba(2,132,199,0.15)] transition duration-200 hover:-translate-y-1 hover:shadow-[0_16px_30px_-10px_rgba(2,132,199,0.35)]">
-      <div className="relative mb-3 h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-sky-50 to-sky-100/60">
-        {product.image ? (
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-contain p-3"
-            sizes="(max-width: 768px) 50vw, 25vw"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center text-4xl text-slate-300">
-            <span aria-hidden="true">🧴</span>
-          </div>
-        )}
-      </div>
+  const href = `/producto/${product.id}`;
 
-      <p className="line-clamp-2 min-h-[2.5rem] text-sm font-semibold text-slate-800">{product.name}</p>
-      <p className="text-xs text-slate-500">{product.presentation}</p>
+  return (
+    <article className="card group flex h-full flex-col gap-3 p-3 transition duration-200 hover:-translate-y-1 hover:shadow-card sm:p-4">
+      <Link
+        href={href}
+        className="relative block aspect-square w-full overflow-hidden rounded-2xl bg-espuma"
+        aria-label={`Ver ${product.name}`}
+      >
+        {badge && (
+          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-limon px-2.5 py-1 text-xs font-bold text-marino">
+            {badge}
+          </span>
+        )}
+        <ProductImage
+          src={product.image}
+          alt={product.name}
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+        />
+      </Link>
+
+      <div className="flex min-h-[3.5rem] flex-col gap-0.5">
+        <Link href={href} className="line-clamp-2 text-[15px] font-semibold leading-snug text-grafito hover:text-agua">
+          {product.name}
+        </Link>
+        <p className="text-xs text-gris sm:text-[13px]">{product.presentation}</p>
+      </div>
 
       {product.variants && (
-        <select
-          value={variant}
-          onChange={(e) => setVariant(e.target.value)}
-          className="mt-2 rounded-lg border border-slate-200 px-2 py-1 text-xs text-slate-700"
-        >
-          {product.variants.map((v) => (
-            <option key={v} value={v}>
-              {v}
-            </option>
-          ))}
-        </select>
+        <label className="text-xs text-gris">
+          <span className="sr-only">Variante de {product.name}</span>
+          <select
+            value={variant}
+            onChange={(e) => setVariant(e.target.value)}
+            className="min-h-[36px] w-full rounded-xl border border-linea bg-white px-2 text-xs text-grafito"
+          >
+            {product.variants.map((v) => (
+              <option key={v} value={v}>
+                {v}
+              </option>
+            ))}
+          </select>
+        </label>
       )}
 
-      <div className="mt-2 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-          className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
-          aria-label={`Restar cantidad de ${product.name}`}
-        >
-          −
-        </button>
-        <span className="w-5 text-center text-xs font-semibold text-slate-700">{quantity}</span>
-        <button
-          type="button"
-          onClick={() => setQuantity((q) => q + 1)}
-          className="h-6 w-6 rounded-full border border-slate-300 text-slate-600 hover:bg-slate-100"
-          aria-label={`Sumar cantidad de ${product.name}`}
-        >
-          +
-        </button>
-      </div>
-
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-3">
-        <span className="text-base font-bold text-sky-600">S/{product.price.toFixed(2)}</span>
+      <div className="mt-auto flex items-center justify-between gap-2">
+        <span className="whitespace-nowrap font-display text-lg font-extrabold text-marino">{formatPrice(product.price)}</span>
         <button
           type="button"
           onClick={handleAdd}
-          className="rounded-full bg-sky-500 px-3 py-1.5 text-xs font-bold text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)] transition hover:bg-sky-600"
+          aria-label={`Agregar ${product.name} al pedido`}
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-agua text-white transition hover:bg-agua-dark"
         >
-          Agregar
+          <PlusIcon className="h-5 w-5" />
         </button>
       </div>
-    </div>
+    </article>
   );
 }

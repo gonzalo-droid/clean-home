@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import Header from "@/components/Header";
@@ -7,8 +7,14 @@ import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
 import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 import Toast from "@/components/Toast";
+import MobileNav from "@/components/MobileNav";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-jakarta",
+});
 
 const SITE_URL = "https://clean-home.example.com";
 
@@ -32,8 +38,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es">
-      <body className={`${inter.className} bg-white text-slate-800 antialiased`}>
+    <html lang="es" className={`${inter.variable} ${jakarta.variable}`}>
+      <body className="bg-espuma font-sans text-grafito antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -50,8 +56,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <CartProvider>
           <Header />
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pb-20 md:pb-0">{children}</main>
           <Footer />
+          <MobileNav />
           <CartDrawer />
           <WhatsAppFloatButton />
           <Toast />

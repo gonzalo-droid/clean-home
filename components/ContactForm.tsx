@@ -17,10 +17,10 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+      className="card flex flex-col gap-4 p-6"
     >
       <div>
-        <label htmlFor="contact-name" className="mb-1 block text-sm font-semibold text-slate-700">
+        <label htmlFor="contact-name" className="mb-1 block text-sm font-semibold">
           Nombre
         </label>
         <input
@@ -29,12 +29,12 @@ export default function ContactForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+          className="input"
         />
       </div>
 
       <div>
-        <label htmlFor="contact-phone" className="mb-1 block text-sm font-semibold text-slate-700">
+        <label htmlFor="contact-phone" className="mb-1 block text-sm font-semibold">
           Teléfono
         </label>
         <input
@@ -43,27 +43,28 @@ export default function ContactForm() {
           required
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+          className="input"
         />
       </div>
 
       <div>
-        <label htmlFor="contact-message" className="mb-1 block text-sm font-semibold text-slate-700">
+        <label htmlFor="contact-message" className="mb-1 block text-sm font-semibold">
           Mensaje
         </label>
         <textarea
           id="contact-message"
           required
           rows={4}
+          style={{ paddingTop: 8, paddingBottom: 8 }}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-800 transition-all duration-200 focus:border-sky-400 focus:outline-none focus:ring-2 focus:ring-sky-400/50"
+          className="input"
         />
       </div>
 
       <button
         type="submit"
-        className="rounded-full bg-sky-500 px-6 py-3 text-sm font-bold text-white shadow-[0_4px_10px_-2px_rgba(2,132,199,0.5)] transition hover:-translate-y-0.5 hover:bg-sky-600"
+        className="btn-primary min-h-[48px] text-base"
       >
         Enviar por WhatsApp
       </button>
