@@ -17,7 +17,7 @@ export const NAV_LINKS = [
 ];
 
 export default function Header() {
-  const { count, toggleCart } = useCart();
+  const { count } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -57,10 +57,10 @@ export default function Header() {
           ))}
         </nav>
 
-        <button
-          type="button"
-          onClick={toggleCart}
-          aria-label={`Abrir carrito, ${count} productos`}
+        <Link
+          href="/carrito"
+          aria-label={`Ver mi pedido, ${count} productos`}
+          aria-current={pathname === "/carrito" ? "page" : undefined}
           className="relative flex h-11 w-11 items-center justify-center rounded-full border border-linea bg-white text-marino transition hover:border-agua"
         >
           <CartIcon className="h-5 w-5" />
@@ -69,7 +69,7 @@ export default function Header() {
               {count}
             </span>
           )}
-        </button>
+        </Link>
       </div>
 
       {menuOpen && (

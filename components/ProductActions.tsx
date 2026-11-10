@@ -9,7 +9,7 @@ import QuantityStepper from "./QuantityStepper";
 import { WhatsAppGlyph } from "./icons";
 
 export default function ProductActions({ product }: { product: Product }) {
-  const { add, showToast, openCart } = useCart();
+  const { add, showToast } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
   const [quantity, setQuantity] = useState(1);
 
@@ -28,7 +28,6 @@ export default function ProductActions({ product }: { product: Product }) {
     );
     showToast(`${product.name} agregado`);
     setQuantity(1);
-    openCart();
   }
 
   const askUrl = buildWhatsAppTextUrl(

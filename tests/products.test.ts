@@ -61,3 +61,24 @@ describe("groups and packs", () => {
     expect(relatedProducts(product).map((p) => p.id)).not.toContain(product.id);
   });
 });
+
+import { cartSuggestions } from "../data/products";
+
+describe("cartSuggestions", () => {
+  it("never suggests products already in the cart", () => {
+    const ids = ["lejia-clorox-4l", "guantes-limpieza"];
+    const suggested = cartSuggestions(ids).map((p) => p.id);
+    for (const id of ids) expect(suggested).not.toContain(id);
+  });
+
+  it("returns best sellers for an empty cart, without duplicates", () => {
+    const suggested = cartSuggestions([], 6).map((p) => p.id);
+    expect(suggested.length).toBe(6);
+    expect(new Set(suggested).size).toBe(6);
+  });
+
+  it("puts related products first", () => {
+    const [first] = cartSuggestions(["detergente-ariel-2kg"]);
+    expect(first.category).toBe("detergentes");
+  });
+});

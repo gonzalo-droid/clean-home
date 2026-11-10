@@ -4,7 +4,6 @@ import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CartDrawer from "@/components/CartDrawer";
 import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 import Toast from "@/components/Toast";
 import MobileNav from "@/components/MobileNav";
@@ -59,7 +58,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main className="min-h-screen pb-20 md:pb-0">{children}</main>
           <Footer />
           <MobileNav />
-          <CartDrawer />
           <WhatsAppFloatButton />
           <Toast />
         </CartProvider>

@@ -13,7 +13,7 @@ const ITEMS = [
 
 export default function MobileNav() {
   const pathname = usePathname();
-  const { count, openCart } = useCart();
+  const { count } = useCart();
 
   return (
     <nav
@@ -36,10 +36,12 @@ export default function MobileNav() {
           </Link>
         );
       })}
-      <button
-        type="button"
-        onClick={openCart}
-        className="relative flex min-h-[52px] flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-gris"
+      <Link
+        href="/carrito"
+        aria-current={pathname === "/carrito" ? "page" : undefined}
+        className={`relative flex min-h-[52px] flex-col items-center justify-center gap-0.5 text-[11px] ${
+          pathname === "/carrito" ? "font-bold text-agua" : "font-medium text-gris"
+        }`}
       >
         <CartIcon className="h-[22px] w-[22px]" />
         Pedido
@@ -48,7 +50,7 @@ export default function MobileNav() {
             {count}
           </span>
         )}
-      </button>
+      </Link>
     </nav>
   );
 }

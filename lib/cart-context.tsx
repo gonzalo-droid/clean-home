@@ -21,10 +21,8 @@ interface CartContextValue {
   clear: () => void;
   total: number;
   count: number;
-  isOpen: boolean;
-  openCart: () => void;
-  closeCart: () => void;
-  toggleCart: () => void;
+  /** true once the saved cart was read from localStorage */
+  hydrated: boolean;
   toast: string | null;
   showToast: (message: string) => void;
 }
@@ -34,7 +32,6 @@ const CartContext = createContext<CartContextValue | null>(null);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -72,10 +69,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     clear: () => setItems([]),
     total: cartTotal(items),
     count: cartCount(items),
-    isOpen,
-    openCart: () => setIsOpen(true),
-    closeCart: () => setIsOpen(false),
-    toggleCart: () => setIsOpen((v) => !v),
+    hydrated,
     toast,
     showToast: (message) => {
       setToast(message);
