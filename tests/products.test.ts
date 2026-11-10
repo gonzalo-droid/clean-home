@@ -82,3 +82,19 @@ describe("cartSuggestions", () => {
     expect(first.category).toBe("detergentes");
   });
 });
+
+import { productPageSuggestions, packsWithProduct } from "../data/products";
+
+describe("productPageSuggestions", () => {
+  it("fills up to the limit without the product itself or duplicates", () => {
+    const product = ALL.find((p) => p.id === "detergente-ariel-2kg")!;
+    const ids = productPageSuggestions(product, 10).map((p) => p.id);
+    expect(ids.length).toBe(10);
+    expect(ids).not.toContain(product.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("finds packs that include a product", () => {
+    expect(packsWithProduct("guantes-limpieza").map((p) => p.id)).toContain("pack-bano");
+  });
+});

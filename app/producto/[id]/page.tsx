@@ -6,9 +6,14 @@ import {
   getCategoryLabel,
   getGroupForCategory,
   getProduct,
-  relatedProducts,
+  packLines,
+  packTotal,
+  packsWithProduct,
+  productPageSuggestions,
 } from "@/data/products";
 import ProductActions from "@/components/ProductActions";
+import AddPackButton from "@/components/AddPackButton";
+import Carousel from "@/components/Carousel";
 import ProductCard from "@/components/ProductCard";
 import ProductImage from "@/components/ProductImage";
 import { formatPrice } from "@/lib/format";
@@ -35,7 +40,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   if (!product) notFound();
 
   const group = getGroupForCategory(product.category);
-  const related = relatedProducts(product);
+  const related = productPageSuggestions(product, 10);
+  const packs = packsWithProduct(product.id);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -89,12 +95,49 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
 
       {related.length > 0 && (
         <section className="mt-14">
-          <h2 className="section-title mb-5">También te puede servir</h2>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-            {related.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
+          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <h2 className="section-title">También te puede servir</h2>
+            {group && (
+              <Link href={`/catalogo?grupo=${group.id}`} className="text-[15px] font-semibold text-agua hover:text-agua-dark">
+                Ver más de {group.label}
+              </Link>
+            )}
           </div>
+          <Carousel label="Productos relacionados">
+            {related.map((p) => (
+              <li key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[220px]">
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </Carousel>
+        </section>
+      )}
+
+      {packs.length > 0 && (
+        <section className="mt-12 rounded-[28px] bg-limon p-5 sm:p-8">
+          <span className="text-xs font-bold uppercase tracking-[0.12em] text-marino">Packs armados</span>
+          <h2 className="mb-5 font-display text-2xl font-extrabold text-marino sm:text-3xl">
+            Llévalo en un pack
+          </h2>
+          <Carousel label="Packs con este producto">
+            {packs.map((pack) => (
+              <li key={pack.id} className="flex w-[78%] shrink-0 snap-start flex-col gap-3 rounded-[20px] bg-white p-4 sm:w-[300px]">
+                <div className="flex -space-x-3" aria-hidden="true">
+                  {packLines(pack).slice(0, 5).map(({ product: item }) => (
+                    <div key={item.id} className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-espuma">
+                      <ProductImage src={item.image} alt="" sizes="48px" padding="p-1" />
+                    </div>
+                  ))}
+                </div>
+                <div>
+                  <p className="font-display font-bold text-marino">{pack.name}</p>
+                  <p className="text-[13px] text-gris">{pack.items.length} productos · {pack.description}</p>
+                </div>
+                <p className="mt-auto font-display text-xl font-extrabold text-agua">{formatPrice(packTotal(pack))}</p>
+                <AddPackButton pack={pack} className="btn-primary w-full" />
+              </li>
+            ))}
+          </Carousel>
         </section>
       )}
     </div>
