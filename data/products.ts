@@ -575,3 +575,18 @@ export function cartSuggestions(cartProductIds: string[], limit = 8): Product[] 
   BEST_SELLER_IDS.forEach((id) => push(getProduct(id)));
   return picked.slice(0, limit);
 }
+
+/** Sugerencias para la página de un producto: relacionados primero, luego los más pedidos. */
+export function productPageSuggestions(product: Product, limit = 10): Product[] {
+  const picked = relatedProducts(product, limit);
+  for (const id of BEST_SELLER_IDS) {
+    if (picked.length >= limit) break;
+    const p = getProduct(id);
+    if (p && p.id !== product.id && !picked.some((x) => x.id === p.id)) picked.push(p);
+  }
+  return picked;
+}
+
+export function packsWithProduct(productId: string): Pack[] {
+  return PACKS.filter((pack) => pack.items.some((i) => i.productId === productId));
+}
