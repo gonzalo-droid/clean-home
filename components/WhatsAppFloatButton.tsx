@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { WhatsAppGlyph } from "./icons";
 
 export default function WhatsAppFloatButton() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(true);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -21,6 +23,9 @@ export default function WhatsAppFloatButton() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
+
+  // En el carrito ya hay un botón para enviar el pedido por WhatsApp.
+  if (pathname === "/carrito") return null;
 
   return (
     <Link

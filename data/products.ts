@@ -560,3 +560,18 @@ export function packLines(pack: Pack): { product: Product; quantity: number }[] 
 export function packTotal(pack: Pack): number {
   return packLines(pack).reduce((sum, { product, quantity }) => sum + product.price * quantity, 0);
 }
+
+/** Productos sugeridos para un carrito: relacionados primero, luego los más pedidos. */
+export function cartSuggestions(cartProductIds: string[], limit = 8): Product[] {
+  const inCart = new Set(cartProductIds);
+  const picked: Product[] = [];
+  const push = (p: Product | undefined) => {
+    if (p && !inCart.has(p.id) && !picked.some((x) => x.id === p.id)) picked.push(p);
+  };
+  for (const id of cartProductIds) {
+    const product = getProduct(id);
+    if (product) relatedProducts(product, 3).forEach(push);
+  }
+  BEST_SELLER_IDS.forEach((id) => push(getProduct(id)));
+  return picked.slice(0, limit);
+}

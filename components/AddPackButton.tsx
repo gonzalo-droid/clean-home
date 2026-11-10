@@ -5,7 +5,7 @@ import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
 
 export default function AddPackButton({ pack, className = "btn-primary w-full" }: { pack: Pack; className?: string }) {
-  const { add, showToast, openCart } = useCart();
+  const { add, showToast } = useCart();
 
   function handleAdd() {
     for (const { product, quantity } of packLines(pack)) {
@@ -24,7 +24,6 @@ export default function AddPackButton({ pack, className = "btn-primary w-full" }
       );
     }
     showToast(`${pack.name} agregado`);
-    openCart();
   }
 
   return (
