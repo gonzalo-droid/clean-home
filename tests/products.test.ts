@@ -38,3 +38,26 @@ describe("product catalog data", () => {
     }
   });
 });
+
+import { GROUPS, PACKS, packLines, packTotal, relatedProducts, PRODUCTS as ALL } from "../data/products";
+
+describe("groups and packs", () => {
+  it("every category belongs to exactly one group", () => {
+    for (const category of CATEGORIES) {
+      const owners = GROUPS.filter((g) => g.categories.includes(category.id));
+      expect(owners.length).toBe(1);
+    }
+  });
+
+  it("every pack item points to an existing product", () => {
+    for (const pack of PACKS) {
+      expect(packLines(pack).length).toBe(pack.items.length);
+      expect(packTotal(pack)).toBeGreaterThan(0);
+    }
+  });
+
+  it("related products never include the product itself", () => {
+    const product = ALL[0];
+    expect(relatedProducts(product).map((p) => p.id)).not.toContain(product.id);
+  });
+});

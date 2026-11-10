@@ -60,3 +60,19 @@ describe("buildContactMessageUrl", () => {
     expect(decoded).toContain("Quisiera cotizar un pedido grande");
   });
 });
+
+describe("buildWhatsAppOrderUrl with customer", () => {
+  it("adds name and district when provided", () => {
+    const url = buildWhatsAppOrderUrl(items, { name: "María", district: "Chiclayo" });
+    const decoded = decodeURIComponent(url.split("?text=")[1]);
+    expect(decoded).toContain("Nombre: María");
+    expect(decoded).toContain("Distrito / ciudad: Chiclayo");
+  });
+
+  it("omits blank customer fields", () => {
+    const decoded = decodeURIComponent(
+      buildWhatsAppOrderUrl(items, { name: "  " }).split("?text=")[1]
+    );
+    expect(decoded).not.toContain("Nombre:");
+  });
+});

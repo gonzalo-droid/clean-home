@@ -410,3 +410,153 @@ export const PRODUCTS: Product[] = [
     image: img("lavavajilla-pasta-patito"),
   },
 ];
+
+export type GroupId = "lavanderia" | "papel" | "bano-cocina" | "accesorios";
+
+export interface CategoryGroup {
+  id: GroupId;
+  label: string;
+  description: string;
+  categories: Category[];
+  image: string;
+}
+
+export const GROUPS: CategoryGroup[] = [
+  {
+    id: "lavanderia",
+    label: "Lavandería",
+    description: "Detergentes en polvo para toda la ropa",
+    categories: ["detergentes"],
+    image: img("detergente-orion-15kg"),
+  },
+  {
+    id: "papel",
+    label: "Papel y desechables",
+    description: "Higiénico, toalla, servilletas y bolsas",
+    categories: ["papel-higienico", "papel-toalla", "servilletas-panuelos", "bolsas"],
+    image: img("papel-toalla-genio-500-hojas"),
+  },
+  {
+    id: "bano-cocina",
+    label: "Baño y cocina",
+    description: "Lejía, limpiatodo, desatoradores y lavavajilla",
+    categories: ["limpieza-bano-cocina", "lavavajilla"],
+    image: img("limpiatodo-sapolio"),
+  },
+  {
+    id: "accesorios",
+    label: "Accesorios y hogar",
+    description: "Paños, trapeadores, guantes y esponjas",
+    categories: ["accesorios-limpieza"],
+    image: img("trapeador-microfibra"),
+  },
+];
+
+export function getProduct(id: string): Product | undefined {
+  return PRODUCTS.find((p) => p.id === id);
+}
+
+export function getCategoryLabel(id: Category): string {
+  return CATEGORIES.find((c) => c.id === id)?.label ?? id;
+}
+
+export function getGroupForCategory(id: Category): CategoryGroup | undefined {
+  return GROUPS.find((g) => g.categories.includes(id));
+}
+
+export function productsInGroup(groupId: GroupId): Product[] {
+  const group = GROUPS.find((g) => g.id === groupId);
+  if (!group) return [];
+  return PRODUCTS.filter((p) => group.categories.includes(p.category));
+}
+
+export function relatedProducts(product: Product, limit = 4): Product[] {
+  const sameCategory = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id);
+  const group = getGroupForCategory(product.category);
+  const sameGroup = group
+    ? PRODUCTS.filter(
+        (p) => group.categories.includes(p.category) && p.category !== product.category
+      )
+    : [];
+  return [...sameCategory, ...sameGroup].slice(0, limit);
+}
+
+/** Productos más pedidos (selección manual). */
+export const BEST_SELLER_IDS = [
+  "detergente-ariel-2kg",
+  "papel-higienico-elite-classic-500x4",
+  "lejia-clorox-4l",
+  "limpiatodo-sapolio",
+  "papel-toalla-genio-500-hojas-unidad",
+  "guantes-limpieza",
+  "trapeador-microfibra",
+  "lavavajilla-pasta-patito-1kg",
+];
+
+export interface Pack {
+  id: string;
+  name: string;
+  description: string;
+  items: { productId: string; quantity: number }[];
+}
+
+/** Combos armados. El precio es la suma de los productos (sin descuento inventado). */
+export const PACKS: Pack[] = [
+  {
+    id: "pack-hogar",
+    name: "Pack Hogar",
+    description: "Lo básico del mes para la casa: ropa, pisos y papel.",
+    items: [
+      { productId: "detergente-ariel-2kg", quantity: 1 },
+      { productId: "lejia-clorox-4l", quantity: 1 },
+      { productId: "papel-higienico-classic-24x2-13mts", quantity: 1 },
+      { productId: "limpiatodo-sapolio", quantity: 1 },
+    ],
+  },
+  {
+    id: "pack-bano",
+    name: "Pack Baño",
+    description: "Deja el baño impecable y con buen aroma.",
+    items: [
+      { productId: "acido-limpiador-sacasarro", quantity: 1 },
+      { productId: "desatorador-banos", quantity: 1 },
+      { productId: "pastillas-tanque-ebriel-x2", quantity: 1 },
+      { productId: "aromatizante-bano-paquete", quantity: 1 },
+      { productId: "guantes-limpieza", quantity: 1 },
+    ],
+  },
+  {
+    id: "pack-cocina",
+    name: "Pack Cocina",
+    description: "Platos, superficies y desagüe sin complicaciones.",
+    items: [
+      { productId: "lavavajilla-pasta-patito-1kg", quantity: 2 },
+      { productId: "display-esponja-platos-2en1-7unid", quantity: 1 },
+      { productId: "desatorador-cocinas", quantity: 1 },
+      { productId: "panos-amarillos-virutex", quantity: 1 },
+      { productId: "papel-toalla-genio-500-hojas-unidad", quantity: 1 },
+    ],
+  },
+  {
+    id: "pack-oficina",
+    name: "Pack Oficina",
+    description: "Para baños y cocinas de oficina o negocio.",
+    items: [
+      { productId: "papel-higienico-jumbo-500x4", quantity: 1 },
+      { productId: "papel-toalla-elite-classic-200m-x2", quantity: 1 },
+      { productId: "jabon-liquido-aval-400ml", quantity: 2 },
+      { productId: "bolsas-negras-140lt", quantity: 1 },
+    ],
+  },
+];
+
+export function packLines(pack: Pack): { product: Product; quantity: number }[] {
+  return pack.items.flatMap(({ productId, quantity }) => {
+    const product = getProduct(productId);
+    return product ? [{ product, quantity }] : [];
+  });
+}
+
+export function packTotal(pack: Pack): number {
+  return packLines(pack).reduce((sum, { product, quantity }) => sum + product.price * quantity, 0);
+}
