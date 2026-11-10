@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { PACKS, cartSuggestions, packLines, packTotal } from "@/data/products";
+import { useState } from "react";
+import { PACKS, cartSuggestions, packLines, packTotal, type Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { buildWhatsAppOrderUrl } from "@/lib/whatsapp";
 import { formatPrice } from "@/lib/format";
 import AddPackButton from "@/components/AddPackButton";
+import Carousel from "@/components/Carousel";
 import ProductCard from "@/components/ProductCard";
 import ProductImage from "@/components/ProductImage";
 import QuantityStepper from "@/components/QuantityStepper";
@@ -18,8 +19,12 @@ export default function CartClient() {
   const [district, setDistrict] = useState("");
   const [sent, setSent] = useState(false);
 
-  const productIds = useMemo(() => items.map((i) => i.productId), [items]);
-  const suggestions = useMemo(() => cartSuggestions(productIds, 8), [productIds]);
+  // Las sugerencias se calculan una sola vez al abrir la página, para que las tarjetas
+  // no se muevan ni desaparezcan mientras el cliente agrega productos.
+  const [suggestions, setSuggestions] = useState<Product[] | null>(null);
+  if (hydrated && suggestions === null) {
+    setSuggestions(cartSuggestions(items.map((i) => i.productId), 10));
+  }
   const whatsappUrl = buildWhatsAppOrderUrl(items, { name, district });
 
   function handleSend() {
@@ -151,11 +156,13 @@ export default function CartClient() {
           <h2 className="section-title">{items.length > 0 ? "Completa tu pedido" : "Los más pedidos"}</h2>
           <Link href="/catalogo" className="text-[15px] font-semibold text-agua hover:text-agua-dark">Ver catálogo</Link>
         </div>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
-          {suggestions.map((p) => (
-            <ProductCard key={p.id} product={p} />
+        <Carousel label="Productos sugeridos">
+          {(suggestions ?? []).map((p) => (
+            <li key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[220px]">
+              <ProductCard product={p} />
+            </li>
           ))}
-        </div>
+        </Carousel>
       </section>
 
       <section className="mt-12 rounded-[28px] bg-limon p-5 sm:p-8">
@@ -166,9 +173,9 @@ export default function CartClient() {
           </div>
           <Link href="/packs" className="text-[15px] font-semibold text-marino underline">Ver detalle de packs</Link>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Carousel label="Packs armados">
           {PACKS.map((pack) => (
-            <div key={pack.id} className="flex flex-col gap-3 rounded-[20px] bg-white p-4">
+            <li key={pack.id} className="flex w-[78%] shrink-0 snap-start flex-col gap-3 rounded-[20px] bg-white p-4 sm:w-[260px]">
               <div className="flex -space-x-3" aria-hidden="true">
                 {packLines(pack).slice(0, 4).map(({ product }) => (
                   <div key={product.id} className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-espuma">
@@ -182,9 +189,9 @@ export default function CartClient() {
               </div>
               <p className="mt-auto font-display text-xl font-extrabold text-agua">{formatPrice(packTotal(pack))}</p>
               <AddPackButton pack={pack} className="btn-primary w-full" />
-            </div>
+            </li>
           ))}
-        </div>
+        </Carousel>
       </section>
     </div>
   );

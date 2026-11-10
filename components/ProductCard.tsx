@@ -7,15 +7,19 @@ import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
 import ProductImage from "./ProductImage";
-import { PlusIcon } from "./icons";
+import QuantityStepper from "./QuantityStepper";
+import { CheckIcon, PlusIcon } from "./icons";
 
 export default function ProductCard({ product, badge }: { product: Product; badge?: string }) {
-  const { add, showToast } = useCart();
+  const { items, add, setQuantity, showToast } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
+
+  const lineId = makeLineId(product.id, variant);
+  const inCartQty = items.find((i) => i.lineId === lineId)?.quantity ?? 0;
 
   function handleAdd() {
     add({
-      lineId: makeLineId(product.id, variant),
+      lineId,
       productId: product.id,
       name: product.name,
       presentation: product.presentation,
@@ -29,16 +33,26 @@ export default function ProductCard({ product, badge }: { product: Product; badg
   const href = `/producto/${product.id}`;
 
   return (
-    <article className="card group flex h-full flex-col gap-3 p-3 transition duration-200 hover:-translate-y-1 hover:shadow-card sm:p-4">
+    <article
+      className={`card group flex h-full flex-col gap-3 p-3 transition duration-200 hover:-translate-y-1 hover:shadow-card sm:p-4 ${
+        inCartQty > 0 ? "border-agua" : ""
+      }`}
+    >
       <Link
         href={href}
         className="relative block aspect-square w-full overflow-hidden rounded-2xl bg-espuma"
         aria-label={`Ver ${product.name}`}
       >
-        {badge && (
-          <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-limon px-2.5 py-1 text-xs font-bold text-marino">
-            {badge}
+        {inCartQty > 0 ? (
+          <span className="absolute left-2.5 top-2.5 z-10 flex items-center gap-1 rounded-full bg-agua px-2.5 py-1 text-xs font-bold text-white">
+            <CheckIcon className="h-3.5 w-3.5" /> En tu pedido
           </span>
+        ) : (
+          badge && (
+            <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-limon px-2.5 py-1 text-xs font-bold text-marino">
+              {badge}
+            </span>
+          )
         )}
         <ProductImage
           src={product.image}
@@ -71,16 +85,26 @@ export default function ProductCard({ product, badge }: { product: Product; badg
         </label>
       )}
 
-      <div className="mt-auto flex items-center justify-between gap-2">
+      <div className={`mt-auto flex gap-2 ${inCartQty > 0 ? "flex-col items-start" : "items-center justify-between"}`}>
         <span className="whitespace-nowrap font-display text-lg font-extrabold text-marino">{formatPrice(product.price)}</span>
-        <button
-          type="button"
-          onClick={handleAdd}
-          aria-label={`Agregar ${product.name} al pedido`}
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-agua text-white transition hover:bg-agua-dark"
-        >
-          <PlusIcon className="h-5 w-5" />
-        </button>
+        {inCartQty > 0 ? (
+          <QuantityStepper
+            size="sm"
+            min={0}
+            value={inCartQty}
+            onChange={(q) => setQuantity(lineId, q)}
+            label={product.name}
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={handleAdd}
+            aria-label={`Agregar ${product.name} al pedido`}
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-agua text-white transition hover:bg-agua-dark"
+          >
+            <PlusIcon className="h-5 w-5" />
+          </button>
+        )}
       </div>
     </article>
   );
