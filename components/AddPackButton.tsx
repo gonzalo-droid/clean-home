@@ -6,7 +6,7 @@ import { makeLineId } from "@/lib/cart";
 import { CheckIcon } from "./icons";
 
 export default function AddPackButton({ pack, className = "btn-primary w-full" }: { pack: Pack; className?: string }) {
-  const { items, add, showToast } = useCart();
+  const { items, add } = useCart();
 
   const lines = packLines(pack).map(({ product, quantity }) => ({
     product,
@@ -17,9 +17,9 @@ export default function AddPackButton({ pack, className = "btn-primary w-full" }
   const inCart = lines.every((l) => items.some((i) => i.lineId === l.lineId));
 
   function handleAdd() {
-    for (const { product, quantity, variant, lineId } of lines) {
-      add(
-        {
+    add(
+      lines.map(({ product, quantity, variant, lineId }) => ({
+        item: {
           lineId,
           productId: product.id,
           name: product.name,
@@ -28,10 +28,10 @@ export default function AddPackButton({ pack, className = "btn-primary w-full" }
           price: product.price,
           image: product.image,
         },
-        quantity
-      );
-    }
-    showToast(`${pack.name} agregado`);
+        quantity,
+      })),
+      pack.name
+    );
   }
 
   if (inCart) {

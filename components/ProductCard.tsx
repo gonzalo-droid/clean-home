@@ -11,23 +11,29 @@ import QuantityStepper from "./QuantityStepper";
 import { CheckIcon, PlusIcon } from "./icons";
 
 export default function ProductCard({ product, badge }: { product: Product; badge?: string }) {
-  const { items, add, setQuantity, showToast } = useCart();
+  const { items, add, setQuantity } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
 
   const lineId = makeLineId(product.id, variant);
   const inCartQty = items.find((i) => i.lineId === lineId)?.quantity ?? 0;
 
   function handleAdd() {
-    add({
-      lineId,
-      productId: product.id,
-      name: product.name,
-      presentation: product.presentation,
-      variant,
-      price: product.price,
-      image: product.image,
-    });
-    showToast(`${product.name} agregado`);
+    add(
+      [
+        {
+          item: {
+            lineId,
+            productId: product.id,
+            name: product.name,
+            presentation: product.presentation,
+            variant,
+            price: product.price,
+            image: product.image,
+          },
+        },
+      ],
+      product.name
+    );
   }
 
   const href = `/producto/${product.id}`;

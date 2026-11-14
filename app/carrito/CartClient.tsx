@@ -17,7 +17,8 @@ export default function CartClient() {
   const { items, hydrated, setQuantity, remove, total, count, clear } = useCart();
   const [name, setName] = useState("");
   const [district, setDistrict] = useState("");
-  const [sent, setSent] = useState(false);
+  // "confirm": se abrió WhatsApp; la lista se conserva hasta que el cliente confirme que la envió.
+  const [step, setStep] = useState<"editing" | "confirm">("editing");
 
   // Las sugerencias se calculan una sola vez al abrir la página, para que las tarjetas
   // no se muevan ni desaparezcan mientras el cliente agrega productos.
@@ -28,16 +29,44 @@ export default function CartClient() {
   const whatsappUrl = buildWhatsAppOrderUrl(items, { name, district });
 
   function handleSend() {
+    setStep("confirm");
+    window.scrollTo({ top: 0 });
+  }
+
+  function handleConfirmSent() {
     clear();
-    setSent(true);
+    setStep("editing");
   }
 
   if (!hydrated) {
-    return <div className="container-page min-h-[60vh] py-8" aria-busy="true" />;
+    return (
+      <div className="container-page min-h-[60vh] py-8" aria-busy="true">
+        <span className="sr-only">Cargando tu pedido…</span>
+        <div className="mb-6 h-9 w-48 animate-pulse rounded-lg bg-linea" />
+        <div className="flex flex-col gap-3">
+          {[0, 1].map((i) => (
+            <div key={i} className="card flex gap-4 p-4">
+              <div className="h-20 w-20 animate-pulse rounded-2xl bg-linea" />
+              <div className="flex flex-1 flex-col gap-2 pt-1">
+                <div className="h-4 w-2/3 animate-pulse rounded bg-linea" />
+                <div className="h-3 w-1/3 animate-pulse rounded bg-linea" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
+  const sendButton = (className: string) => (
+    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={handleSend} className={className}>
+      <WhatsAppGlyph className="h-5 w-5" />
+      Enviar pedido por WhatsApp
+    </a>
+  );
+
   return (
-    <div className="container-page py-8">
+    <div className={`container-page py-8 ${items.length > 0 && step === "editing" ? "pb-32 md:pb-8" : ""}`}>
       <nav aria-label="Ruta" className="mb-2 text-[13px] text-gris">
         <Link href="/" className="hover:text-agua">Inicio</Link> / <span>Tu pedido</span>
       </nav>
@@ -48,16 +77,24 @@ export default function CartClient() {
         )}
       </div>
 
-      {sent ? (
-        <div className="card flex flex-col items-center gap-3 p-10 text-center">
-          <span className="flex h-16 w-16 items-center justify-center rounded-full bg-menta text-agua">
-            <CheckIcon className="h-8 w-8" />
+      {step === "confirm" && items.length > 0 ? (
+        <div role="status" className="card mx-auto flex max-w-md flex-col gap-3 p-6 sm:p-8">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-menta text-agua">
+            <WhatsAppGlyph className="h-7 w-7" />
           </span>
-          <p className="font-display text-xl font-extrabold text-marino">¡Pedido enviado a WhatsApp!</p>
-          <p className="max-w-md text-sm text-gris">
-            Termina de enviar el mensaje en WhatsApp y te responderemos para coordinar pago y entrega.
+          <p className="font-display text-2xl font-extrabold text-marino">¿Se abrió WhatsApp con tu pedido?</p>
+          <p className="text-sm text-gris">
+            Tu lista sigue guardada hasta que confirmes que la enviaste. Después te respondemos para coordinar pago y entrega.
           </p>
-          <Link href="/catalogo" className="btn-primary mt-2">Seguir comprando</Link>
+          <button type="button" onClick={handleConfirmSent} className="btn-primary mt-2 min-h-[48px] text-base">
+            <CheckIcon className="h-5 w-5" /> Sí, ya la envié
+          </button>
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="btn-wa min-h-[48px] text-base">
+            <WhatsAppGlyph className="h-5 w-5" /> Abrir WhatsApp otra vez
+          </a>
+          <button type="button" onClick={() => setStep("editing")} className="btn-outline min-h-[48px]">
+            Seguir editando
+          </button>
         </div>
       ) : items.length === 0 ? (
         <div className="card flex flex-col items-center gap-3 p-10 text-center">
@@ -137,17 +174,16 @@ export default function CartClient() {
               <span className="font-display text-2xl font-extrabold text-marino">{formatPrice(total)}</span>
             </div>
             <p className="text-xs text-gris">El envío y el pago se coordinan por WhatsApp. No se cobra nada en la web.</p>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleSend}
-              className="btn-wa min-h-[52px] w-full text-base font-bold"
-            >
-              <WhatsAppGlyph className="h-5 w-5" />
-              Enviar pedido por WhatsApp
-            </a>
+            {sendButton("btn-wa hidden min-h-[52px] w-full text-base font-bold md:inline-flex")}
           </aside>
+
+          {/* En móvil el botón de enviar queda siempre a la vista, con el total. */}
+          <div className="fixed inset-x-0 bottom-0 z-40 border-t border-linea bg-white px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-3 md:hidden">
+            {sendButton("btn-wa min-h-[52px] w-full text-base font-bold")}
+            <p className="mt-1.5 text-center text-xs text-gris">
+              Total <span className="font-bold tabular-nums text-marino">{formatPrice(total)}</span> · pago y envío por WhatsApp
+            </p>
+          </div>
         </div>
       )}
 

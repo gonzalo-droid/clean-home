@@ -15,6 +15,9 @@ export default function MobileNav() {
   const pathname = usePathname();
   const { count } = useCart();
 
+  // En "Tu pedido" la barra inferior la ocupa el botón de enviar.
+  if (pathname === "/carrito") return null;
+
   return (
     <nav
       aria-label="Navegación inferior"

@@ -9,24 +9,28 @@ import QuantityStepper from "./QuantityStepper";
 import { WhatsAppGlyph } from "./icons";
 
 export default function ProductActions({ product }: { product: Product }) {
-  const { add, showToast } = useCart();
+  const { add } = useCart();
   const [variant, setVariant] = useState(product.variants?.[0]);
   const [quantity, setQuantity] = useState(1);
 
   function handleAdd() {
     add(
-      {
-        lineId: makeLineId(product.id, variant),
-        productId: product.id,
-        name: product.name,
-        presentation: product.presentation,
-        variant,
-        price: product.price,
-        image: product.image,
-      },
-      quantity
+      [
+        {
+          item: {
+            lineId: makeLineId(product.id, variant),
+            productId: product.id,
+            name: product.name,
+            presentation: product.presentation,
+            variant,
+            price: product.price,
+            image: product.image,
+          },
+          quantity,
+        },
+      ],
+      product.name
     );
-    showToast(`${product.name} agregado`);
     setQuantity(1);
   }
 
