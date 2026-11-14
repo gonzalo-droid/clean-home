@@ -11,7 +11,7 @@ export default function Toast() {
   const onCartPage = pathname === "/carrito";
 
   return (
-    <div aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-24 z-[60] flex justify-center px-4 md:bottom-8">
+    <div aria-live="polite" className={`pointer-events-none fixed inset-x-0 z-[60] flex justify-center px-4 md:bottom-8 ${onCartPage ? "bottom-32" : "bottom-24"}`}>
       {toast && (
         <div
           key={toast.id}

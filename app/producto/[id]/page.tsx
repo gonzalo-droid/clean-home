@@ -53,9 +53,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <div className="container-page py-8">
+    <div className="container-page pb-28 pt-6 md:py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav aria-label="Ruta" className="mb-5 text-[13px] text-gris">
+      <nav aria-label="Ruta" className="mb-4 text-[13px] text-gris">
         <Link href="/" className="hover:text-agua">Inicio</Link> /{" "}
         <Link href="/catalogo" className="hover:text-agua">Catálogo</Link>
         {group && (
@@ -65,12 +65,12 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
         )}
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
-        <div className="relative aspect-square w-full overflow-hidden rounded-[28px] bg-white">
-          <ProductImage src={product.image} alt={product.name} sizes="(max-width: 1024px) 100vw, 50vw" priority padding="p-10" />
+      <div className="grid gap-5 lg:grid-cols-2 lg:gap-12">
+        <div className="relative aspect-[4/3] max-h-[42vh] w-full overflow-hidden rounded-xl bg-white lg:aspect-square lg:max-h-none">
+          <ProductImage src={product.image} alt={product.name} sizes="(max-width: 1024px) 100vw, 50vw" priority padding="p-6 lg:p-10" />
         </div>
 
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <Link
               href={`/catalogo?categoria=${product.category}`}

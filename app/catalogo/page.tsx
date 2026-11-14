@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default async function CatalogoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ categoria?: string; grupo?: string; q?: string }>;
+  searchParams: Promise<{ categoria?: string; grupo?: string }>;
 }) {
-  const { categoria, grupo, q } = await searchParams;
+  const { categoria, grupo } = await searchParams;
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
@@ -39,10 +39,9 @@ export default async function CatalogoPage({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListJsonLd) }} />
       <CatalogClient
-        key={`${categoria ?? ""}|${grupo ?? ""}|${q ?? ""}`}
+        key={`${categoria ?? ""}|${grupo ?? ""}`}
         initialCategory={categoria}
         initialGroup={grupo}
-        initialQuery={q}
       />
     </>
   );

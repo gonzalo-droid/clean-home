@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 import Toast from "@/components/Toast";
-import MobileNav from "@/components/MobileNav";
+import OrderBar from "@/components/OrderBar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const jakarta = Plus_Jakarta_Sans({
@@ -55,9 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <CartProvider>
           <Header />
-          <main className="min-h-screen pb-20 md:pb-0">{children}</main>
+          <main className="min-h-screen pb-24 md:pb-0">{children}</main>
           <Footer />
-          <MobileNav />
+          <OrderBar />
           <WhatsAppFloatButton />
           <Toast />
         </CartProvider>

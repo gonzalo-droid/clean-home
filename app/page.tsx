@@ -11,10 +11,9 @@ import {
   productsInGroup,
 } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
-import Reveal from "@/components/Reveal";
 import { formatPrice } from "@/lib/format";
 import { WHATSAPP_URL } from "@/lib/whatsapp";
-import { ArrowRightIcon, BoxIcon, ChatIcon, SmileIcon, TruckIcon, WhatsAppGlyph } from "@/components/icons";
+import { ChatIcon, ClockIcon, TagIcon, TruckIcon, WhatsAppGlyph } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Clean Home | Productos de limpieza con pedidos por WhatsApp",
@@ -22,125 +21,81 @@ export const metadata: Metadata = {
     "Detergentes, papel higiénico, papel toalla, lejía, bolsas y accesorios de limpieza. Arma tu pedido y recíbelo coordinando por WhatsApp. Envíos a todo el Perú.",
 };
 
-const TRUST = [
-  { Icon: SmileIcon, text: "+40 clientes satisfechos" },
-  { Icon: ChatIcon, text: "Pedidos por WhatsApp" },
+const FACTS = [
+  { Icon: ClockIcon, text: "Lunes a sábado, 9am – 7pm" },
+  { Icon: TagIcon, text: "Yape, transferencia o efectivo" },
   { Icon: TruckIcon, text: "Envíos a todo el Perú" },
-  { Icon: BoxIcon, text: "Precios mayoristas" },
+  { Icon: ChatIcon, text: "Te atiende una persona, no un bot" },
 ];
 
 const STEPS = [
-  { title: "Elige tus productos", text: "Agrégalos al carrito con la cantidad y el aroma que quieras." },
-  { title: "Envía tu pedido", text: "Un botón abre WhatsApp con tu lista ya escrita." },
-  { title: "Recibe en casa", text: "Coordinamos contigo el pago (Yape, transferencia o efectivo) y la entrega." },
+  { title: "Elige tus productos", text: "Agrégalos con la cantidad y el aroma que quieras." },
+  { title: "Envía la lista", text: "Un botón abre WhatsApp con tu pedido ya escrito." },
+  { title: "Recibe en casa", text: "Coordinamos contigo el pago y la entrega." },
 ];
 
-const HERO_IMAGES = [
-  { id: "detergente-ariel-2kg", bg: "bg-menta", offset: "" },
-  { id: "lejia-clorox-4l", bg: "bg-white", offset: "mt-8" },
-  { id: "papel-higienico-elite-classic-500x4", bg: "bg-white", offset: "" },
-  { id: "limpiatodo-sapolio", bg: "bg-menta", offset: "mt-8" },
+/** Pedido de ejemplo para la boleta del hero, con productos y precios reales. */
+const SAMPLE_ORDER = [
+  { id: "detergente-ariel-2kg", quantity: 1 },
+  { id: "lejia-clorox-4l", quantity: 2 },
+  { id: "papel-higienico-elite-classic-500x4", quantity: 1 },
 ];
 
 export default function HomePage() {
   const bestSellers = BEST_SELLER_IDS.map(getProduct).filter((p) => p !== undefined);
+  const sample = SAMPLE_ORDER.flatMap(({ id, quantity }) => {
+    const product = getProduct(id);
+    return product ? [{ product, quantity }] : [];
+  });
+  const sampleTotal = sample.reduce((sum, { product, quantity }) => sum + product.price * quantity, 0);
 
   return (
     <div>
-      {/* Hero */}
-      <section className="container-page pt-4 sm:pt-8">
-        <div className="grid items-center gap-8 overflow-hidden rounded-[28px] bg-marino p-6 sm:p-10 lg:grid-cols-2 lg:p-14">
-          <div className="flex flex-col gap-5">
-            <span className="self-start rounded-full bg-limon px-3.5 py-1.5 text-xs font-bold text-marino sm:text-[13px]">
-              Envíos a todo el Perú
-            </span>
-            <h1 className="font-display text-4xl font-extrabold leading-[1.05] text-white sm:text-5xl lg:text-[56px]">
-              Tu casa limpia, sin salir de casa
-            </h1>
-            <p className="max-w-lg text-base leading-relaxed text-menta sm:text-lg">
-              Detergentes, papel, lejía y accesorios de las marcas que ya conoces. Arma tu pedido y lo
-              coordinamos por WhatsApp.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/catalogo" className="btn-lemon min-h-[48px] px-7 text-base">
-                Ver catálogo
-              </Link>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn min-h-[48px] border-2 border-white px-7 text-base text-white hover:bg-white hover:text-marino"
-              >
-                <WhatsAppGlyph className="h-5 w-5" />
-                Pedir por WhatsApp
-              </a>
-            </div>
-          </div>
-          <div className="hidden grid-cols-2 gap-4 sm:grid" aria-hidden="true">
-            {HERO_IMAGES.map(({ id, bg, offset }, i) => {
-              const p = getProduct(id);
-              if (!p?.image) return null;
-              return (
-                <div key={id} className={`relative h-44 rounded-[20px] lg:h-52 ${bg} ${offset}`}>
-                  <Image src={p.image} alt="" fill priority={i < 2} sizes="(max-width: 1024px) 40vw, 25vw" className="object-contain p-5" />
-                </div>
-              );
-            })}
+      {/* Hero: el mensaje que recibe la tienda es la promesa */}
+      <section className="container-page grid items-center gap-5 pt-5 sm:gap-10 sm:pt-12 lg:grid-cols-[1.1fr_1fr]">
+        <div className="flex flex-col gap-4 sm:gap-5">
+          <h1 className="font-display text-[2.6rem] font-extrabold leading-[0.95] text-marino sm:text-6xl lg:text-7xl">
+            Tu limpieza del mes, pedida por WhatsApp
+          </h1>
+          <p className="hidden max-w-lg text-lg leading-relaxed text-gris sm:block">
+            Detergentes, papel, lejía y accesorios de las marcas que ya conoces. Armas la lista aquí, la envías por
+            WhatsApp y coordinamos contigo el pago y la entrega.
+          </p>
+          <div className="hidden flex-wrap items-center gap-x-6 gap-y-3 sm:flex">
+            <Link href="/catalogo" className="btn-primary min-h-[52px] px-8 text-base">
+              Ver catálogo
+            </Link>
+            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-wa hover:underline">
+              <WhatsAppGlyph className="h-5 w-5" /> Escribir por WhatsApp
+            </a>
           </div>
         </div>
+
+        <figure className="boleta mx-auto w-full max-w-md lg:rotate-[1.5deg]" aria-label="Ejemplo de pedido por WhatsApp">
+          <figcaption className="mb-1 text-[13px] text-gris">Así llega tu pedido por WhatsApp:</figcaption>
+          <ul>
+            {sample.map(({ product, quantity }) => (
+              <li key={product.id} className="boleta-fila">
+                <span className="min-w-0">
+                  {product.name} <span className="text-gris">{product.presentation} ×{quantity}</span>
+                </span>
+                <span className="shrink-0">{formatPrice(product.price * quantity)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="boleta-total">
+            <span>Total</span>
+            <b>{formatPrice(sampleTotal)}</b>
+          </p>
+        </figure>
       </section>
 
-      {/* Confianza */}
-      <section className="container-page py-6">
-        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {TRUST.map(({ Icon, text }) => (
-            <li key={text} className="card flex items-center gap-3 p-3 sm:p-4">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-menta text-agua">
-                <Icon className="h-5 w-5" />
-              </span>
-              <span className="text-[13px] font-semibold sm:text-sm">{text}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Categorías */}
-      <section className="container-page py-8">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <h2 className="section-title">Compra por categoría</h2>
-          <Link href="/catalogo" className="text-[15px] font-semibold text-agua hover:text-agua-dark">
-            Ver todo ({PRODUCTS.length})
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {GROUPS.map((group, i) => (
-            <Reveal key={group.id} delayMs={i * 80}>
-              <Link
-                href={`/catalogo?grupo=${group.id}`}
-                className={`group flex h-48 flex-col justify-between rounded-3xl p-4 transition hover:-translate-y-1 hover:shadow-card sm:h-56 sm:p-5 ${
-                  i % 3 === 0 ? "bg-menta" : "border border-linea bg-white"
-                }`}
-              >
-                <div>
-                  <p className="font-display text-lg font-bold leading-tight text-marino sm:text-xl">{group.label}</p>
-                  <p className="mt-1 hidden text-[13px] text-gris sm:block">{group.description}</p>
-                  <p className="mt-1 text-xs font-semibold text-agua">{productsInGroup(group.id).length} productos</p>
-                </div>
-                <div className="relative h-20 w-24 self-end sm:h-28 sm:w-32">
-                  <Image src={group.image} alt="" fill sizes="128px" className="object-contain transition group-hover:scale-105" />
-                </div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* Más pedidos */}
-      <section className="container-page py-8">
-        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <h2 className="section-title">Los más pedidos</h2>
-          <Link href="/catalogo" className="text-[15px] font-semibold text-agua hover:text-agua-dark">
-            Ver catálogo
+      {/* Más pedidos: visible desde la primera pantalla en móvil */}
+      <section className="container-page pt-8 sm:pt-14">
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+          <h2 className="section-title">Lo que más se pide</h2>
+          <Link href="/catalogo" className="link text-[15px]">
+            Ver los {PRODUCTS.length} productos
           </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
@@ -150,57 +105,89 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Packs */}
-      <section className="container-page py-8">
-        <div className="grid items-center gap-6 rounded-[28px] bg-limon p-6 sm:p-10 lg:grid-cols-[1fr_2fr]">
-          <div className="flex flex-col gap-3">
-            <span className="text-xs font-bold uppercase tracking-[0.12em] text-marino">Packs armados</span>
-            <h2 className="font-display text-3xl font-extrabold leading-tight text-marino sm:text-4xl">
-              Todo lo del mes en un solo clic
-            </h2>
-            <p className="text-marino">Combos para casa, baño, cocina u oficina.</p>
-            <Link href="/packs" className="btn mt-1 self-start bg-marino text-white hover:bg-grafito">
-              Ver todos los packs <ArrowRightIcon className="h-4 w-4" />
+      {/* Datos concretos en vez de frases de confianza */}
+      <section className="container-page pt-10">
+        <ul className="grid gap-x-6 gap-y-3 border-y border-linea py-5 sm:grid-cols-2 lg:grid-cols-4">
+          {FACTS.map(({ Icon, text }) => (
+            <li key={text} className="flex items-center gap-3 text-[15px] font-semibold text-marino">
+              <Icon className="h-5 w-5 shrink-0" />
+              {text}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Categorías */}
+      <section className="container-page pt-10 sm:pt-14">
+        <h2 className="section-title mb-4">Compra por categoría</h2>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {GROUPS.map((group) => (
+            <Link
+              key={group.id}
+              href={`/catalogo?grupo=${group.id}`}
+              className="group flex min-h-[176px] flex-col justify-between gap-2 rounded-xl bg-white p-4 sm:p-5"
+            >
+              <div>
+                <p className="font-display text-2xl font-extrabold leading-none text-marino group-hover:underline">{group.label}</p>
+                <p className="mt-1.5 hidden text-[13px] text-gris sm:block">{group.description}</p>
+                <p className="mt-1.5 text-xs font-bold tabular-nums text-gris">{productsInGroup(group.id).length} productos</p>
+              </div>
+              <div className="relative h-20 w-24 self-end sm:h-24 sm:w-28">
+                <Image src={group.image} alt="" fill sizes="112px" className="object-contain" />
+              </div>
             </Link>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-3">
-            {PACKS.slice(0, 3).map((pack) => (
-              <Link key={pack.id} href={`/packs#${pack.id}`} className="flex flex-col gap-1 rounded-[18px] bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-card">
-                <p className="font-display font-bold text-marino">{pack.name}</p>
-                <p className="text-[13px] text-gris">{pack.items.length} productos · {pack.description}</p>
-                <p className="mt-2 font-display text-lg font-extrabold text-agua">{formatPrice(packTotal(pack))}</p>
-              </Link>
-            ))}
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Cómo pedir */}
-      <section className="container-page py-8">
-        <h2 className="section-title mb-5">Así de fácil es pedir</h2>
-        <ol className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+      {/* Packs */}
+      <section className="container-page pt-10 sm:pt-14">
+        <div className="mb-4 flex flex-wrap items-baseline justify-between gap-3">
+          <div>
+            <h2 className="section-title">Packs armados</h2>
+            <p className="mt-1 text-gris">Listas que se piden juntas. Agrégalas de una vez y ajusta cantidades en tu pedido.</p>
+          </div>
+          <Link href="/packs" className="link text-[15px]">
+            Ver todos los packs
+          </Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4">
+          {PACKS.slice(0, 3).map((pack) => (
+            <Link key={pack.id} href={`/packs#${pack.id}`} className="group flex flex-col gap-1 rounded-xl bg-white p-4 sm:p-5">
+              <p className="font-display text-xl font-extrabold text-marino group-hover:underline">{pack.name}</p>
+              <p className="text-[13px] text-gris">
+                {pack.items.length} productos. {pack.description}
+              </p>
+              <p className="mt-2 font-display text-2xl font-extrabold tabular-nums text-marino">{formatPrice(packTotal(pack))}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Cómo pedir: es una secuencia real, por eso va numerada */}
+      <section className="container-page pt-10 sm:pt-14">
+        <h2 className="section-title mb-4">Cómo pedir</h2>
+        <ol className="grid gap-6 sm:grid-cols-3">
           {STEPS.map((step, i) => (
-              <li key={step.title} className="card flex h-full flex-col gap-2.5 p-6">
-                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-marino font-display font-extrabold text-white">
-                  {i + 1}
-                </span>
-                <p className="font-display text-lg font-bold text-marino">{step.title}</p>
+            <li key={step.title} className="flex gap-3">
+              <span className="font-display text-4xl font-extrabold leading-none tabular-nums text-limon-dark">{i + 1}</span>
+              <div>
+                <p className="font-semibold text-marino">{step.title}</p>
                 <p className="text-sm text-gris">{step.text}</p>
-              </li>
+              </div>
+            </li>
           ))}
         </ol>
       </section>
 
       {/* Mayoristas */}
-      <section className="container-page py-8">
-        <div className="flex flex-wrap items-center justify-between gap-6 rounded-[28px] bg-menta p-6 sm:p-10">
-          <div className="flex max-w-xl flex-col gap-2">
-            <h2 className="font-display text-2xl font-extrabold text-marino sm:text-3xl">
-              ¿Tienes bodega, oficina o restaurante?
-            </h2>
-            <p className="text-grafito">Precios especiales por volumen y atención directa.</p>
+      <section className="container-page pt-10 sm:pt-14">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-linea pt-8">
+          <div className="flex max-w-xl flex-col gap-1">
+            <h2 className="section-title">¿Tienes bodega, oficina o restaurante?</h2>
+            <p className="text-gris">Precios por volumen y presentaciones grandes, con atención directa.</p>
           </div>
-          <Link href="/mayoristas" className="btn min-h-[48px] bg-marino px-7 text-white hover:bg-grafito">
+          <Link href="/mayoristas" className="btn-outline min-h-[48px] px-7">
             Cotizar como mayorista
           </Link>
         </div>

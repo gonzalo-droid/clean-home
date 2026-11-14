@@ -40,22 +40,22 @@ export default function ProductCard({ product, badge }: { product: Product; badg
 
   return (
     <article
-      className={`card group flex h-full flex-col gap-3 p-3 transition duration-200 hover:-translate-y-1 hover:shadow-card sm:p-4 ${
-        inCartQty > 0 ? "border-agua" : ""
+      className={`flex h-full flex-col gap-2.5 rounded-xl bg-white p-2.5 sm:p-3 ${
+        inCartQty > 0 ? "ring-2 ring-marino" : ""
       }`}
     >
       <Link
         href={href}
-        className="relative block aspect-square w-full overflow-hidden rounded-2xl bg-espuma"
+        className="relative block aspect-square w-full overflow-hidden rounded-lg"
         aria-label={`Ver ${product.name}`}
       >
         {inCartQty > 0 ? (
-          <span className="absolute left-2.5 top-2.5 z-10 flex items-center gap-1 rounded-full bg-agua px-2.5 py-1 text-xs font-bold text-white">
+          <span className="absolute left-1.5 top-1.5 z-10 flex items-center gap-1 rounded-md bg-marino px-2 py-0.5 text-xs font-bold text-white">
             <CheckIcon className="h-3.5 w-3.5" /> En tu pedido
           </span>
         ) : (
           badge && (
-            <span className="absolute left-2.5 top-2.5 z-10 rounded-full bg-limon px-2.5 py-1 text-xs font-bold text-marino">
+            <span className="absolute left-1.5 top-1.5 z-10 rounded-md bg-limon px-2 py-0.5 text-xs font-bold text-marino">
               {badge}
             </span>
           )
@@ -67,11 +67,11 @@ export default function ProductCard({ product, badge }: { product: Product; badg
         />
       </Link>
 
-      <div className="flex min-h-[3.5rem] flex-col gap-0.5">
-        <Link href={href} className="line-clamp-2 text-[15px] font-semibold leading-snug text-grafito hover:text-agua">
+      <div className="flex flex-col items-start gap-1.5">
+        <Link href={href} className="line-clamp-3 text-[15px] font-semibold leading-snug text-grafito hover:underline">
           {product.name}
         </Link>
-        <p className="text-xs text-gris sm:text-[13px]">{product.presentation}</p>
+        <span className="rounded-md bg-papel px-1.5 py-0.5 text-xs font-bold text-marino">{product.presentation}</span>
       </div>
 
       {product.variants && (
@@ -80,7 +80,7 @@ export default function ProductCard({ product, badge }: { product: Product; badg
           <select
             value={variant}
             onChange={(e) => setVariant(e.target.value)}
-            className="min-h-[36px] w-full rounded-xl border border-linea bg-white px-2 text-xs text-grafito"
+            className="min-h-[40px] w-full rounded-lg border border-linea bg-white px-2 text-[13px] text-grafito"
           >
             {product.variants.map((v) => (
               <option key={v} value={v}>
@@ -92,7 +92,7 @@ export default function ProductCard({ product, badge }: { product: Product; badg
       )}
 
       <div className={`mt-auto flex gap-2 ${inCartQty > 0 ? "flex-col items-start" : "items-center justify-between"}`}>
-        <span className="whitespace-nowrap font-display text-lg font-extrabold text-marino">{formatPrice(product.price)}</span>
+        <span className="whitespace-nowrap font-display text-2xl font-extrabold tabular-nums text-marino">{formatPrice(product.price)}</span>
         {inCartQty > 0 ? (
           <QuantityStepper
             size="sm"
@@ -106,7 +106,7 @@ export default function ProductCard({ product, badge }: { product: Product; badg
             type="button"
             onClick={handleAdd}
             aria-label={`Agregar ${product.name} al pedido`}
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-agua text-white transition hover:bg-agua-dark"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-marino text-white transition hover:bg-grafito"
           >
             <PlusIcon className="h-5 w-5" />
           </button>

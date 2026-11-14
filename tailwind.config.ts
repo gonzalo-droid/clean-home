@@ -9,6 +9,7 @@ const config: Config = {
         agua: { DEFAULT: "#0E7C86", dark: "#0A6169" },
         menta: "#DDF3EE",
         espuma: "#F5FAF8",
+        papel: "#F4F7F6",
         limon: { DEFAULT: "#F4C542", dark: "#E0AE22" },
         wa: { DEFAULT: "#0F7A40", dark: "#0B6234" },
         grafito: "#1E2A32",
