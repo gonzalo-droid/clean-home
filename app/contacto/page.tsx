@@ -23,14 +23,14 @@ const FAQ = [
 export default function ContactoPage() {
   return (
     <div className="container-page py-8">
-      <h1 className="font-display text-3xl font-extrabold text-marino sm:text-4xl">Contacto</h1>
+      <h1 className="font-display text-4xl font-extrabold text-marino sm:text-6xl">Contacto</h1>
       <p className="mb-8 mt-2 text-gris">Escríbenos por WhatsApp para consultas o para coordinar tu pedido.</p>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <div className="flex flex-col gap-6 rounded-[20px] bg-marino p-6 text-white">
+        <div className="flex flex-col gap-6 rounded-xl bg-marino p-6 text-white">
           <div>
             <p className="text-sm text-menta">WhatsApp</p>
-            <p className="font-display text-3xl font-extrabold">976 509 570</p>
+            <p className="font-display text-5xl font-extrabold tabular-nums">976 509 570</p>
           </div>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="btn-wa self-start min-h-[48px]">
             <WhatsAppGlyph className="h-5 w-5" /> Escribir por WhatsApp
@@ -38,11 +38,11 @@ export default function ContactoPage() {
           <div className="border-t border-white/15 pt-5 text-sm">
             <p className="font-semibold">Horario de atención</p>
             <p className="text-menta">Lunes a sábado, 9am – 7pm</p>
-            <p className="mt-1 text-xs text-menta/80">Atención solo por WhatsApp y delivery — sin tienda física.</p>
+            <p className="mt-1 text-xs text-menta/80">Atención solo por WhatsApp y delivery, sin tienda física.</p>
           </div>
           <div className="border-t border-white/15 pt-5 text-sm">
             <p className="font-semibold">Métodos de pago</p>
-            <p className="text-menta">Yape · Transferencia · Efectivo</p>
+            <p className="text-menta">Yape, transferencia o efectivo</p>
           </div>
         </div>
         <ContactForm />
@@ -50,12 +50,12 @@ export default function ContactoPage() {
 
       <section id="preguntas" className="mt-14 scroll-mt-24">
         <h2 className="section-title mb-5">Preguntas frecuentes</h2>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col">
           {FAQ.map(({ q, a }) => (
-            <details key={q} className="card group p-5 [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display font-bold text-marino">
+            <details key={q} className="group border-b border-linea py-4 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 font-display text-xl font-extrabold text-marino">
                 {q}
-                <span aria-hidden="true" className="text-xl text-agua transition group-open:rotate-45">+</span>
+                <span aria-hidden="true" className="text-xl text-marino transition group-open:rotate-45">+</span>
               </summary>
               <p className="mt-3 text-sm text-gris">{a}</p>
             </details>

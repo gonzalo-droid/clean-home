@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import Header from "@/components/Header";
@@ -8,12 +8,8 @@ import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 import Toast from "@/components/Toast";
 import OrderBar from "@/components/OrderBar";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-jakarta",
-});
+// Una sola familia: Archivo en ancho normal para leer y estrecho (font-display) para títulos y precios.
+const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo" });
 
 const SITE_URL = "https://clean-home.example.com";
 
@@ -37,8 +33,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es" className={`${inter.variable} ${jakarta.variable}`}>
-      <body className="bg-espuma font-sans text-grafito antialiased">
+    <html lang="es" className={archivo.variable}>
+      <body className="bg-papel font-sans text-grafito antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

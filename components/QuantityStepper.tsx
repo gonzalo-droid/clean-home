@@ -22,7 +22,7 @@ export default function QuantityStepper({
         type="button"
         onClick={() => onChange(Math.max(min, value - 1))}
         aria-label={`Restar cantidad de ${label}`}
-        className={`${btn} flex items-center justify-center rounded-full text-marino hover:bg-menta`}
+        className={`${btn} flex items-center justify-center rounded-full text-marino hover:bg-papel`}
       >
         <MinusIcon className="h-4 w-4" />
       </button>
@@ -33,7 +33,7 @@ export default function QuantityStepper({
         type="button"
         onClick={() => onChange(value + 1)}
         aria-label={`Sumar cantidad de ${label}`}
-        className={`${btn} flex items-center justify-center rounded-full text-marino hover:bg-menta`}
+        className={`${btn} flex items-center justify-center rounded-full text-marino hover:bg-papel`}
       >
         <PlusIcon className="h-4 w-4" />
       </button>

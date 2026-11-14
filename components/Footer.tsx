@@ -11,7 +11,7 @@ export default function Footer() {
           <Logo light />
           <p className="text-sm leading-relaxed">
             Productos de limpieza para tu hogar y negocio. Venta online con atención por WhatsApp
-            y delivery — sin tienda física.
+            y delivery, sin tienda física.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export default function Footer() {
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white">
             WhatsApp 976 509 570
           </a>
-          <p>Yape · Transferencia · Efectivo</p>
+          <p>Yape, transferencia o efectivo</p>
         </div>
       </div>
       <div className="border-t border-white/10">

@@ -56,11 +56,11 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     <div className="container-page pb-28 pt-6 md:py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav aria-label="Ruta" className="mb-4 text-[13px] text-gris">
-        <Link href="/" className="hover:text-agua">Inicio</Link> /{" "}
-        <Link href="/catalogo" className="hover:text-agua">Catálogo</Link>
+        <Link href="/" className="hover:text-marino hover:underline">Inicio</Link> /{" "}
+        <Link href="/catalogo" className="hover:text-marino hover:underline">Catálogo</Link>
         {group && (
           <>
-            {" "}/ <Link href={`/catalogo?grupo=${group.id}`} className="hover:text-agua">{group.label}</Link>
+            {" "}/ <Link href={`/catalogo?grupo=${group.id}`} className="hover:text-marino hover:underline">{group.label}</Link>
           </>
         )}
       </nav>
@@ -74,21 +74,21 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="flex flex-col gap-2">
             <Link
               href={`/catalogo?categoria=${product.category}`}
-              className="self-start rounded-full bg-menta px-3 py-1 text-xs font-semibold text-marino hover:underline"
+              className="self-start text-[13px] font-semibold text-gris hover:text-marino hover:underline"
             >
               {getCategoryLabel(product.category)}
             </Link>
-            <h1 className="font-display text-3xl font-extrabold leading-tight text-marino sm:text-4xl">{product.name}</h1>
-            <p className="text-gris">{product.presentation}</p>
+            <h1 className="font-display text-4xl font-extrabold leading-[0.95] text-marino sm:text-5xl">{product.name}</h1>
+            <span className="self-start rounded-md bg-white px-2 py-0.5 text-sm font-bold text-marino">{product.presentation}</span>
           </div>
-          <p className="font-display text-4xl font-extrabold text-marino">{formatPrice(product.price)}</p>
+          <p className="font-display text-5xl font-extrabold tabular-nums text-marino">{formatPrice(product.price)}</p>
 
           <ProductActions product={product} />
 
           <ul className="grid gap-3 border-t border-linea pt-6 text-sm sm:grid-cols-3">
-            <li className="flex items-center gap-2"><TruckIcon className="h-5 w-5 text-agua" /> Envíos a todo el Perú</li>
-            <li className="flex items-center gap-2"><ChatIcon className="h-5 w-5 text-agua" /> Pedido por WhatsApp</li>
-            <li className="flex items-center gap-2"><ShieldIcon className="h-5 w-5 text-agua" /> Marcas reconocidas</li>
+            <li className="flex items-center gap-2"><TruckIcon className="h-5 w-5 text-marino" /> Envíos a todo el Perú</li>
+            <li className="flex items-center gap-2"><ChatIcon className="h-5 w-5 text-marino" /> Pedido por WhatsApp</li>
+            <li className="flex items-center gap-2"><ShieldIcon className="h-5 w-5 text-marino" /> Marcas reconocidas</li>
           </ul>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <h2 className="section-title">También te puede servir</h2>
             {group && (
-              <Link href={`/catalogo?grupo=${group.id}`} className="text-[15px] font-semibold text-agua hover:text-agua-dark">
+              <Link href={`/catalogo?grupo=${group.id}`} className="link text-[15px]">
                 Ver más de {group.label}
               </Link>
             )}
@@ -114,26 +114,24 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       )}
 
       {packs.length > 0 && (
-        <section className="mt-12 rounded-[28px] bg-limon p-5 sm:p-8">
-          <span className="text-xs font-bold uppercase tracking-[0.12em] text-marino">Packs armados</span>
-          <h2 className="mb-5 font-display text-2xl font-extrabold text-marino sm:text-3xl">
-            Llévalo en un pack
-          </h2>
+        <section className="mt-12">
+          <h2 className="section-title">Llévalo en un pack</h2>
+          <p className="mb-4 mt-1 text-gris">Listas que se piden juntas. Luego ajustas cantidades en tu pedido.</p>
           <Carousel label="Packs con este producto">
             {packs.map((pack) => (
-              <li key={pack.id} className="flex w-[78%] shrink-0 snap-start flex-col gap-3 rounded-[20px] bg-white p-4 sm:w-[300px]">
+              <li key={pack.id} className="flex w-[78%] shrink-0 snap-start flex-col gap-3 rounded-xl bg-white p-4 sm:w-[300px]">
                 <div className="flex -space-x-3" aria-hidden="true">
                   {packLines(pack).slice(0, 5).map(({ product: item }) => (
-                    <div key={item.id} className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-espuma">
+                    <div key={item.id} className="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-papel">
                       <ProductImage src={item.image} alt="" sizes="48px" padding="p-1" />
                     </div>
                   ))}
                 </div>
                 <div>
-                  <p className="font-display font-bold text-marino">{pack.name}</p>
-                  <p className="text-[13px] text-gris">{pack.items.length} productos · {pack.description}</p>
+                  <p className="font-display text-xl font-extrabold text-marino">{pack.name}</p>
+                  <p className="text-[13px] text-gris">{pack.items.length} productos. {pack.description}</p>
                 </div>
-                <p className="mt-auto font-display text-xl font-extrabold text-agua">{formatPrice(packTotal(pack))}</p>
+                <p className="mt-auto font-display text-2xl font-extrabold tabular-nums text-marino">{formatPrice(packTotal(pack))}</p>
                 <AddPackButton pack={pack} className="btn-primary w-full" />
               </li>
             ))}

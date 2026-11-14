@@ -52,7 +52,7 @@ export default function ProductActions({ product }: { product: Product }) {
                 aria-pressed={variant === v}
                 onClick={() => setVariant(v)}
                 className={`min-h-[44px] rounded-full px-4 text-sm font-semibold transition ${
-                  variant === v ? "bg-marino text-white" : "border border-linea bg-white text-grafito hover:border-agua"
+                  variant === v ? "bg-marino text-white" : "border border-linea bg-white text-grafito hover:border-marino"
                 }`}
               >
                 {v}

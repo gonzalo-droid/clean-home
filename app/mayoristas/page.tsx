@@ -17,12 +17,11 @@ const BENEFITS = [
 export default function MayoristasPage() {
   return (
     <div className="container-page py-8">
-      <div className="mb-10 rounded-[28px] bg-marino p-6 text-white sm:p-10">
-        <span className="text-xs font-bold uppercase tracking-[0.12em] text-limon">Mayoristas</span>
-        <h1 className="mt-2 max-w-2xl font-display text-3xl font-extrabold leading-tight sm:text-5xl">
+      <div className="mb-10 flex max-w-2xl flex-col gap-3">
+        <h1 className="font-display text-4xl font-extrabold leading-[0.95] text-marino sm:text-6xl">
           Limpieza para tu negocio, al por mayor
         </h1>
-        <p className="mt-3 max-w-xl text-menta">
+        <p className="text-lg text-gris">
           Bodegas, oficinas, restaurantes, hoteles y colegios. Cuéntanos qué necesitas y te enviamos una cotización.
         </p>
       </div>
@@ -30,13 +29,11 @@ export default function MayoristasPage() {
       <div className="grid gap-8 lg:grid-cols-[1fr_440px]">
         <div className="flex flex-col gap-6">
           <h2 className="section-title">¿Por qué comprar con nosotros?</h2>
-          <ul className="grid gap-4 sm:grid-cols-2">
+          <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
             {BENEFITS.map(({ Icon, title, text }) => (
-              <li key={title} className="card flex flex-col gap-2 p-5">
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-menta text-agua">
-                  <Icon className="h-5 w-5" />
-                </span>
-                <p className="font-display text-lg font-bold text-marino">{title}</p>
+              <li key={title} className="flex flex-col gap-1.5 border-t-2 border-marino pt-3">
+                <Icon className="h-6 w-6 text-marino" />
+                <p className="font-display text-2xl font-extrabold text-marino">{title}</p>
                 <p className="text-sm text-gris">{text}</p>
               </li>
             ))}

@@ -39,7 +39,7 @@ export default function Carousel({ label, children }: { label: string; children:
   };
 
   const arrow =
-    "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-linea bg-white text-marino shadow-card transition hover:border-agua disabled:pointer-events-none disabled:opacity-0 md:flex";
+    "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-linea bg-white text-marino shadow-card transition hover:border-marino disabled:pointer-events-none disabled:opacity-0 md:flex";
 
   return (
     <section aria-roledescription="carrusel" aria-label={label} className="relative">

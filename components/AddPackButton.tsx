@@ -38,7 +38,7 @@ export default function AddPackButton({ pack, className = "btn-primary w-full" }
     return (
       <p
         role="status"
-        className="btn w-full bg-menta font-bold text-marino"
+        className="btn w-full border-2 border-marino font-bold text-marino"
         aria-label={`${pack.name}: todos sus productos ya están en tu pedido`}
       >
         <CheckIcon className="h-4 w-4" /> Pack en tu pedido
