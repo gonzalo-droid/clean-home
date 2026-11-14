@@ -28,7 +28,7 @@ export default function WholesaleForm() {
 
   return (
     <form onSubmit={handleSubmit} className="card flex flex-col gap-4 p-6">
-      <h2 className="font-display text-xl font-extrabold text-marino">Pide tu cotización</h2>
+      <h2 className="font-display text-3xl font-extrabold leading-none text-marino">Pide tu cotización</h2>
       <label className="flex flex-col gap-1 text-sm font-semibold">
         Nombre o empresa
         <input required className="input" value={name} onChange={(e) => setName(e.target.value)} autoComplete="organization" />

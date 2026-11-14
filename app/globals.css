@@ -7,8 +7,21 @@
     scroll-behavior: smooth;
   }
   :focus-visible {
-    outline: 2px solid #0E7C86;
+    outline: 2px solid #0b3b5c;
     outline-offset: 2px;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer utilities {
+  /* Archivo estrecho, como los carteles de precio de mercado. */
+  .font-display {
+    font-stretch: 72%;
+    letter-spacing: -0.005em;
   }
 }
 
@@ -17,7 +30,7 @@
     @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition;
   }
   .btn-primary {
-    @apply btn bg-agua text-white hover:bg-agua-dark;
+    @apply btn bg-marino text-white hover:bg-grafito;
   }
   .btn-lemon {
     @apply btn bg-limon font-bold text-marino hover:bg-limon-dark;
@@ -29,15 +42,45 @@
     @apply btn border-2 border-marino text-marino hover:bg-marino hover:text-white;
   }
   .card {
-    @apply rounded-[20px] border border-linea bg-white;
+    @apply rounded-xl border border-linea bg-white;
   }
   .container-page {
     @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
   }
   .section-title {
-    @apply font-display text-2xl font-extrabold text-marino sm:text-3xl;
+    @apply font-display text-3xl font-extrabold leading-none text-marino sm:text-4xl;
+  }
+  .link {
+    @apply font-semibold text-marino underline decoration-limon decoration-2 underline-offset-4 hover:decoration-marino;
+  }
+  /* La boleta del pedido: hoja blanca con borde troquelado y cifras alineadas. */
+  .boleta {
+    @apply relative bg-white px-4 pb-5 pt-4 text-marino sm:px-5;
+    font-variant-numeric: tabular-nums;
+    border-radius: 6px 6px 0 0;
+    filter: drop-shadow(0 1px 0 #dce6e9) drop-shadow(0 10px 18px rgba(11, 59, 92, 0.1));
+  }
+  .boleta::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -7px;
+    height: 8px;
+    background:
+      linear-gradient(135deg, #fff 50%, transparent 50%) 0 0 / 12px 8px repeat-x,
+      linear-gradient(225deg, #fff 50%, transparent 50%) 0 0 / 12px 8px repeat-x;
+  }
+  .boleta-fila {
+    @apply flex items-baseline justify-between gap-3 border-b border-dashed border-linea py-2 text-sm;
+  }
+  .boleta-total {
+    @apply mt-1 flex items-baseline justify-between border-t-2 border-marino pt-2.5 text-sm font-semibold;
+  }
+  .boleta-total b {
+    @apply font-display text-3xl font-extrabold;
   }
   .input {
-    @apply min-h-[44px] w-full rounded-xl border border-linea bg-white px-3 text-sm text-grafito placeholder:text-gris focus:border-agua focus:outline-none focus:ring-2 focus:ring-agua/30;
+    @apply min-h-[44px] w-full rounded-xl border border-linea bg-white px-3 text-sm text-grafito placeholder:text-gris focus:border-marino focus:outline-none focus:ring-2 focus:ring-marino/20;
   }
 }
