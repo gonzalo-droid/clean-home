@@ -9,9 +9,11 @@ export default function Toast() {
   const { toast, dismissToast } = useCart();
   const pathname = usePathname();
   const onCartPage = pathname === "/carrito";
+  // En carrito y producto la barra fija inferior es más alta: el aviso va encima de ella.
+  const aboveTallBar = onCartPage || pathname.startsWith("/producto/");
 
   return (
-    <div aria-live="polite" className={`pointer-events-none fixed inset-x-0 z-[60] flex justify-center px-4 md:bottom-8 ${onCartPage ? "bottom-32" : "bottom-24"}`}>
+    <div aria-live="polite" className={`pointer-events-none fixed inset-x-0 z-[60] flex justify-center px-4 md:bottom-8 ${aboveTallBar ? "bottom-36" : "bottom-24"}`}>
       {toast && (
         <div
           key={toast.id}

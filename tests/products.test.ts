@@ -83,18 +83,53 @@ describe("cartSuggestions", () => {
   });
 });
 
-import { productPageSuggestions, packsWithProduct } from "../data/products";
+import { boughtTogether, defaultVariant, getGroupForCategory, packsWithProduct, unitPrice } from "../data/products";
 
-describe("productPageSuggestions", () => {
-  it("fills up to the limit without the product itself or duplicates", () => {
+describe("boughtTogether", () => {
+  it("only suggests products from other groups, without the product itself or duplicates", () => {
     const product = ALL.find((p) => p.id === "detergente-ariel-2kg")!;
-    const ids = productPageSuggestions(product, 10).map((p) => p.id);
-    expect(ids.length).toBe(10);
+    const group = getGroupForCategory(product.category)!;
+    const suggested = boughtTogether(product, 10);
+    const ids = suggested.map((p) => p.id);
+    expect(ids.length).toBeGreaterThan(0);
     expect(ids).not.toContain(product.id);
     expect(new Set(ids).size).toBe(ids.length);
+    for (const p of suggested) expect(group.categories).not.toContain(p.category);
+  });
+
+  it("puts products that share a pack first", () => {
+    const product = ALL.find((p) => p.id === "detergente-ariel-2kg")!;
+    const [first] = boughtTogether(product, 10);
+    const sharedPack = packsWithProduct(product.id).flatMap((pack) => pack.items.map((i) => i.productId));
+    expect(sharedPack).toContain(first.id);
   });
 
   it("finds packs that include a product", () => {
     expect(packsWithProduct("guantes-limpieza").map((p) => p.id)).toContain("pack-bano");
+  });
+});
+
+describe("defaultVariant", () => {
+  it("picks the variant shown in the photo", () => {
+    expect(defaultVariant(ALL.find((p) => p.id === "detergente-orion-15kg")!)).toBe("Floral");
+  });
+
+  it("is undefined for products without variants", () => {
+    expect(defaultVariant(ALL.find((p) => p.id === "lejia-clorox-4l")!)).toBeUndefined();
+  });
+
+  it("every imageVariant is one of the product's variants", () => {
+    for (const p of ALL) if (p.imageVariant) expect(p.variants).toContain(p.imageVariant);
+  });
+});
+
+describe("unitPrice", () => {
+  it("divides the price by the units in the presentation", () => {
+    expect(unitPrice(ALL.find((p) => p.id === "papel-higienico-elite-classic-500x4")!)).toEqual({ amount: 12, label: "rollo" });
+    expect(unitPrice(ALL.find((p) => p.id === "detergente-orion-15kg")!)).toEqual({ amount: 4.33, label: "kg" });
+  });
+
+  it("is null when the presentation has no unit count", () => {
+    expect(unitPrice(ALL.find((p) => p.id === "guantes-limpieza")!)).toBeNull();
   });
 });

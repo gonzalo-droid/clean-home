@@ -9,7 +9,9 @@ import {
   packLines,
   packTotal,
   packsWithProduct,
-  productPageSuggestions,
+  boughtTogether,
+  relatedProducts,
+  unitPrice,
 } from "@/data/products";
 import ProductActions from "@/components/ProductActions";
 import AddPackButton from "@/components/AddPackButton";
@@ -17,7 +19,7 @@ import Carousel from "@/components/Carousel";
 import ProductCard from "@/components/ProductCard";
 import ProductImage from "@/components/ProductImage";
 import { formatPrice } from "@/lib/format";
-import { ChatIcon, ShieldIcon, TruckIcon } from "@/components/icons";
+import { ClockIcon, TagIcon, TruckIcon } from "@/components/icons";
 
 export function generateStaticParams() {
   return PRODUCTS.map((p) => ({ id: p.id }));
@@ -40,7 +42,9 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   if (!product) notFound();
 
   const group = getGroupForCategory(product.category);
-  const related = productPageSuggestions(product, 10);
+  const sameGroup = relatedProducts(product, 10);
+  const together = boughtTogether(product, 10);
+  const perUnit = unitPrice(product);
   const packs = packsWithProduct(product.id);
 
   const jsonLd = {
@@ -53,7 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   };
 
   return (
-    <div className="container-page pb-28 pt-6 md:py-8">
+    <div className="container-page pb-40 pt-6 md:py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <nav aria-label="Ruta" className="mb-4 text-[13px] text-gris">
         <Link href="/" className="hover:text-marino hover:underline">Inicio</Link> /{" "}
@@ -66,8 +70,8 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
       </nav>
 
       <div className="grid gap-5 lg:grid-cols-2 lg:gap-12">
-        <div className="relative aspect-[4/3] max-h-[42vh] w-full overflow-hidden rounded-xl bg-white lg:aspect-square lg:max-h-none">
-          <ProductImage src={product.image} alt={product.name} sizes="(max-width: 1024px) 100vw, 50vw" priority padding="p-6 lg:p-10" />
+        <div className="relative aspect-[4/3] max-h-[42vh] w-full overflow-hidden rounded-xl bg-white lg:max-h-[480px] lg:self-start">
+          <ProductImage src={product.image} alt={product.name} sizes="(max-width: 1024px) 100vw, 50vw" priority padding="p-6 lg:p-12" />
         </div>
 
         <div className="flex flex-col gap-5">
@@ -81,30 +85,49 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
             <h1 className="font-display text-4xl font-extrabold leading-[0.95] text-marino sm:text-5xl">{product.name}</h1>
             <span className="self-start rounded-md bg-white px-2 py-0.5 text-sm font-bold text-marino">{product.presentation}</span>
           </div>
-          <p className="font-display text-5xl font-extrabold tabular-nums text-marino">{formatPrice(product.price)}</p>
+          <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <p className="font-display text-5xl font-extrabold tabular-nums text-marino">{formatPrice(product.price)}</p>
+            {perUnit && (
+              <p className="text-[15px] text-gris">
+                <span className="font-bold tabular-nums text-marino">{formatPrice(perUnit.amount)}</span> por {perUnit.label}
+              </p>
+            )}
+          </div>
 
           <ProductActions product={product} />
 
-          <ul className="grid gap-3 border-t border-linea pt-6 text-sm sm:grid-cols-3">
-            <li className="flex items-center gap-2"><TruckIcon className="h-5 w-5 text-marino" /> Envíos a todo el Perú</li>
-            <li className="flex items-center gap-2"><ChatIcon className="h-5 w-5 text-marino" /> Pedido por WhatsApp</li>
-            <li className="flex items-center gap-2"><ShieldIcon className="h-5 w-5 text-marino" /> Marcas reconocidas</li>
+          <ul className="flex flex-col gap-2.5 border-t border-linea pt-5 text-sm">
+            <li className="flex items-start gap-2"><TruckIcon className="h-5 w-5 shrink-0 text-marino" /> Envíos a todo el Perú</li>
+            <li className="flex items-start gap-2"><TagIcon className="h-5 w-5 shrink-0 text-marino" /> Pagas al coordinar: Yape, transferencia o efectivo</li>
+            <li className="flex items-start gap-2"><ClockIcon className="h-5 w-5 shrink-0 text-marino" /> Te atendemos de lunes a sábado, 9am – 7pm</li>
           </ul>
         </div>
       </div>
 
-      {related.length > 0 && (
+      {sameGroup.length > 0 && group && (
         <section className="mt-14">
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <h2 className="section-title">También te puede servir</h2>
-            {group && (
-              <Link href={`/catalogo?grupo=${group.id}`} className="link text-[15px]">
-                Ver más de {group.label}
-              </Link>
-            )}
+            <h2 className="section-title">Más de {group.label}</h2>
+            <Link href={`/catalogo?grupo=${group.id}`} className="link text-[15px]">
+              Ver todo {group.label}
+            </Link>
           </div>
-          <Carousel label="Productos relacionados">
-            {related.map((p) => (
+          <Carousel label={`Más de ${group.label}`}>
+            {sameGroup.map((p) => (
+              <li key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[220px]">
+                <ProductCard product={p} />
+              </li>
+            ))}
+          </Carousel>
+        </section>
+      )}
+
+      {together.length > 0 && (
+        <section className="mt-12">
+          <h2 className="section-title">Se pide junto con</h2>
+          <p className="mb-4 mt-1 text-gris">Para completar tu pedido con productos de otras secciones.</p>
+          <Carousel label="Se pide junto con">
+            {together.map((p) => (
               <li key={p.id} className="w-[46%] shrink-0 snap-start sm:w-[220px]">
                 <ProductCard product={p} />
               </li>

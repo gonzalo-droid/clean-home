@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import type { Product } from "@/data/products";
+import { defaultVariant, type Product } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
 import { formatPrice } from "@/lib/format";
@@ -12,7 +12,7 @@ import { CheckIcon, PlusIcon } from "./icons";
 
 export default function ProductCard({ product, badge }: { product: Product; badge?: string }) {
   const { items, add, setQuantity } = useCart();
-  const [variant, setVariant] = useState(product.variants?.[0]);
+  const [variant, setVariant] = useState(defaultVariant(product));
 
   const lineId = makeLineId(product.id, variant);
   const inCartQty = items.find((i) => i.lineId === lineId)?.quantity ?? 0;
