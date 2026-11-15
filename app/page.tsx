@@ -10,10 +10,10 @@ import {
   packTotal,
   productsInGroup,
 } from "@/data/products";
+import HeroOrder from "@/components/HeroOrder";
 import ProductCard from "@/components/ProductCard";
 import { formatPrice } from "@/lib/format";
-import { WHATSAPP_URL } from "@/lib/whatsapp";
-import { ChatIcon, ClockIcon, TagIcon, TruckIcon, WhatsAppGlyph } from "@/components/icons";
+import { ChatIcon, ClockIcon, TagIcon, TruckIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Clean Home | Productos de limpieza con pedidos por WhatsApp",
@@ -34,61 +34,13 @@ const STEPS = [
   { title: "Recibe en casa", text: "Coordinamos contigo el pago y la entrega." },
 ];
 
-/** Pedido de ejemplo para la boleta del hero, con productos y precios reales. */
-const SAMPLE_ORDER = [
-  { id: "detergente-ariel-2kg", quantity: 1 },
-  { id: "lejia-clorox-4l", quantity: 2 },
-  { id: "papel-higienico-elite-classic-500x4", quantity: 1 },
-];
-
 export default function HomePage() {
   const bestSellers = BEST_SELLER_IDS.map(getProduct).filter((p) => p !== undefined);
-  const sample = SAMPLE_ORDER.flatMap(({ id, quantity }) => {
-    const product = getProduct(id);
-    return product ? [{ product, quantity }] : [];
-  });
-  const sampleTotal = sample.reduce((sum, { product, quantity }) => sum + product.price * quantity, 0);
 
   return (
     <div>
-      {/* Hero: el mensaje que recibe la tienda es la promesa */}
-      <section className="container-page grid items-center gap-5 pt-5 sm:gap-10 sm:pt-12 lg:grid-cols-[1.1fr_1fr]">
-        <div className="flex flex-col gap-4 sm:gap-5">
-          <h1 className="font-display text-[2.6rem] font-extrabold leading-[0.95] text-marino sm:text-6xl lg:text-7xl">
-            Tu limpieza del mes, pedida por WhatsApp
-          </h1>
-          <p className="hidden max-w-lg text-lg leading-relaxed text-gris sm:block">
-            Detergentes, papel, lejía y accesorios de las marcas que ya conoces. Armas la lista aquí, la envías por
-            WhatsApp y coordinamos contigo el pago y la entrega.
-          </p>
-          <div className="hidden flex-wrap items-center gap-x-6 gap-y-3 sm:flex">
-            <Link href="/catalogo" className="btn-primary min-h-[52px] px-8 text-base">
-              Ver catálogo
-            </Link>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-[44px] items-center gap-2 font-bold text-wa hover:underline">
-              <WhatsAppGlyph className="h-5 w-5" /> Escribir por WhatsApp
-            </a>
-          </div>
-        </div>
-
-        <figure className="boleta mx-auto w-full max-w-md lg:rotate-[1.5deg]" aria-label="Ejemplo de pedido por WhatsApp">
-          <figcaption className="mb-1 text-[13px] text-gris">Así llega tu pedido por WhatsApp:</figcaption>
-          <ul>
-            {sample.map(({ product, quantity }) => (
-              <li key={product.id} className="boleta-fila">
-                <span className="min-w-0">
-                  {product.name} <span className="text-gris">{product.presentation} ×{quantity}</span>
-                </span>
-                <span className="shrink-0">{formatPrice(product.price * quantity)}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="boleta-total">
-            <span>Total</span>
-            <b>{formatPrice(sampleTotal)}</b>
-          </p>
-        </figure>
-      </section>
+      {/* Hero: la boleta del pedido, que crece al tocar un producto */}
+      <HeroOrder productCount={PRODUCTS.length} />
 
       {/* Más pedidos: visible desde la primera pantalla en móvil */}
       <section className="container-page pt-8 sm:pt-14">
