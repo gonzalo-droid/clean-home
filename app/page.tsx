@@ -39,7 +39,7 @@ export default function HomePage() {
 
   return (
     <div>
-      {/* Hero: la boleta del pedido, que crece al tocar un producto */}
+      {/* Hero: el titular y la boleta con un pedido de ejemplo */}
       <HeroOrder productCount={PRODUCTS.length} />
 
       {/* Más pedidos: visible desde la primera pantalla en móvil */}

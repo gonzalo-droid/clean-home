@@ -1,6 +1,6 @@
 "use client";
 
-import { packLines, type Pack } from "@/data/products";
+import { defaultVariant, packLines, type Pack } from "@/data/products";
 import { useCart } from "@/lib/cart-context";
 import { makeLineId } from "@/lib/cart";
 import { CheckIcon } from "./icons";
@@ -11,8 +11,8 @@ export default function AddPackButton({ pack, className = "btn-primary w-full" }
   const lines = packLines(pack).map(({ product, quantity }) => ({
     product,
     quantity,
-    variant: product.variants?.[0],
-    lineId: makeLineId(product.id, product.variants?.[0]),
+    variant: defaultVariant(product),
+    lineId: makeLineId(product.id, defaultVariant(product)),
   }));
   const inCart = lines.every((l) => items.some((i) => i.lineId === l.lineId));
 

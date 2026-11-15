@@ -14,6 +14,10 @@ export interface Product {
   category: Category;
   presentation: string;
   variants?: string[];
+  /** Variante que muestra la foto (aroma del empaque). Es también la variante elegida por defecto. */
+  imageVariant?: string;
+  /** Cuántas unidades trae la presentación, para mostrar el precio por unidad (solo si count > 1). */
+  unit?: { count: number; label: string };
   price: number;
   image: string | null;
 }
@@ -38,6 +42,7 @@ export const PRODUCTS: Product[] = [
     name: "Detergente Ariel en Polvo",
     category: "detergentes",
     presentation: "2 KG",
+    unit: { count: 2, label: "kg" },
     price: 28.0,
     image: img("detergente-ariel-2kg"),
   },
@@ -47,6 +52,8 @@ export const PRODUCTS: Product[] = [
     category: "detergentes",
     presentation: "15 KG",
     variants: ["Lavanda", "Floral", "Limón"],
+    imageVariant: "Floral",
+    unit: { count: 15, label: "kg" },
     price: 65.0,
     image: img("detergente-orion-15kg"),
   },
@@ -55,6 +62,7 @@ export const PRODUCTS: Product[] = [
     name: "Detergente Sapolio",
     category: "detergentes",
     presentation: "2 KG",
+    unit: { count: 2, label: "kg" },
     price: 15.5,
     image: img("detergente-sapolio-2kg"),
   },
@@ -64,6 +72,7 @@ export const PRODUCTS: Product[] = [
     category: "detergentes",
     presentation: "150 GR",
     variants: ["Rosas", "Limón", "Lavanda"],
+    imageVariant: "Rosas",
     price: 1.0,
     image: img("detergente-orion-150gr"),
   },
@@ -74,6 +83,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Higiénico Jumbo",
     category: "papel-higienico",
     presentation: "500M X 4",
+    unit: { count: 4, label: "rollo" },
     price: 38.0,
     image: img("papel-higienico-jumbo-500x4"),
   },
@@ -82,6 +92,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Higiénico Elite Professional Classic",
     category: "papel-higienico",
     presentation: "500M X 4",
+    unit: { count: 4, label: "rollo" },
     price: 48.0,
     image: img("papel-higienico-elite-classic-500x4"),
   },
@@ -90,6 +101,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Higiénico Elite Rendipel",
     category: "papel-higienico",
     presentation: "100MTS X 6 Rollos",
+    unit: { count: 6, label: "rollo" },
     price: 20.0,
     image: img("papel-higienico-rendipel-100mts-x6"),
   },
@@ -116,6 +128,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Toalla Ecológico",
     category: "papel-toalla",
     presentation: "200M X 2",
+    unit: { count: 2, label: "rollo" },
     price: 38.0,
     image: img("papel-toalla-ecologico-200m-x2"),
   },
@@ -124,6 +137,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Toalla Elite Classic",
     category: "papel-toalla",
     presentation: "200M X 2",
+    unit: { count: 2, label: "rollo" },
     price: 38.0,
     image: img("papel-toalla-elite-classic-200m-x2"),
   },
@@ -140,6 +154,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Toalla Mega Rollo Super",
     category: "papel-toalla",
     presentation: "Paquete X 12",
+    unit: { count: 12, label: "rollo" },
     price: 30.0,
     image: img("papel-toalla-mega-rollo"),
   },
@@ -164,6 +179,7 @@ export const PRODUCTS: Product[] = [
     name: "Papel Toalla Genio",
     category: "papel-toalla",
     presentation: "500 Hojas — Paquete X 6",
+    unit: { count: 6, label: "unidad" },
     price: 58.0,
     image: img("papel-toalla-genio-500-hojas"),
   },
@@ -190,6 +206,7 @@ export const PRODUCTS: Product[] = [
     name: "Servilleta Classic 300X18",
     category: "servilletas-panuelos",
     presentation: "Paquete",
+    unit: { count: 18, label: "unidad" },
     price: 32.0,
     image: img("servilleta-classic-300"),
   },
@@ -224,6 +241,7 @@ export const PRODUCTS: Product[] = [
     name: "Lejía Clorox",
     category: "limpieza-bano-cocina",
     presentation: "4 L",
+    unit: { count: 4, label: "litro" },
     price: 10.5,
     image: img("lejia-clorox-4l"),
   },
@@ -280,6 +298,7 @@ export const PRODUCTS: Product[] = [
     name: "Pastillas para Tanque Ebriel Azul",
     category: "limpieza-bano-cocina",
     presentation: "X 2 Unid",
+    unit: { count: 2, label: "unidad" },
     price: 6.5,
     image: img("pastillas-tanque-ebriel"),
   },
@@ -332,6 +351,7 @@ export const PRODUCTS: Product[] = [
     name: "Display de Esponja para Cocina",
     category: "accesorios-limpieza",
     presentation: "12 Unidades",
+    unit: { count: 12, label: "unidad" },
     price: 20.0,
     image: img("display-esponja-cocina-12unid"),
   },
@@ -356,6 +376,7 @@ export const PRODUCTS: Product[] = [
     name: "Paño de Limpieza Multiuso Virutex",
     category: "accesorios-limpieza",
     presentation: "6 Unidades",
+    unit: { count: 6, label: "unidad" },
     price: 7.0,
     image: img("pano-limpieza-multiuso-virutex"),
   },
@@ -398,6 +419,7 @@ export const PRODUCTS: Product[] = [
     name: "Lavavajilla Líquida Orion",
     category: "lavavajilla",
     presentation: "3 LT",
+    unit: { count: 3, label: "litro" },
     price: 20.0,
     image: null,
   },
@@ -577,14 +599,37 @@ export function cartSuggestions(cartProductIds: string[], limit = 8): Product[] 
 }
 
 /** Sugerencias para la página de un producto: relacionados primero, luego los más pedidos. */
-export function productPageSuggestions(product: Product, limit = 10): Product[] {
-  const picked = relatedProducts(product, limit);
-  for (const id of BEST_SELLER_IDS) {
-    if (picked.length >= limit) break;
-    const p = getProduct(id);
-    if (p && p.id !== product.id && !picked.some((x) => x.id === p.id)) picked.push(p);
+/** Variante elegida por defecto: la de la foto, para que lo que se ve coincida con lo que se pide. */
+export function defaultVariant(product: Product): string | undefined {
+  if (!product.variants) return undefined;
+  return product.imageVariant && product.variants.includes(product.imageVariant)
+    ? product.imageVariant
+    : product.variants[0];
+}
+
+/** Precio por unidad de la presentación (p. ej. S/ 12.00 por rollo), o null si no aplica. */
+export function unitPrice(product: Product): { amount: number; label: string } | null {
+  if (!product.unit || product.unit.count <= 1) return null;
+  return { amount: Math.round((product.price / product.unit.count) * 100) / 100, label: product.unit.label };
+}
+
+/**
+ * «Se pide junto con»: productos de OTRO grupo. Primero los que comparten un pack con este
+ * producto, luego los más pedidos.
+ */
+export function boughtTogether(product: Product, limit = 10): Product[] {
+  const group = getGroupForCategory(product.category);
+  const picked: Product[] = [];
+  const push = (p: Product | undefined) => {
+    if (!p || p.id === product.id || picked.some((x) => x.id === p.id)) return;
+    if (group && group.categories.includes(p.category)) return;
+    picked.push(p);
+  };
+  for (const pack of PACKS) {
+    if (pack.items.some((i) => i.productId === product.id)) pack.items.forEach((i) => push(getProduct(i.productId)));
   }
-  return picked;
+  for (const id of BEST_SELLER_IDS) push(getProduct(id));
+  return picked.slice(0, limit);
 }
 
 export function packsWithProduct(productId: string): Pack[] {
