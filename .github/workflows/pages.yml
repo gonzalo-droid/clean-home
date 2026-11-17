@@ -42,6 +42,8 @@ jobs:
         env:
           # "/clean-home": la ruta donde Pages sirve el sitio.
           PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # URL completa del sitio (con el dominio propio si está configurado), para sitemap y metadatos.
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
