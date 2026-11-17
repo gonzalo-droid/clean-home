@@ -42,7 +42,18 @@ function normalize(text: string) {
   return text.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
-export default function CatalogClient({
+/**
+ * Lee la categoría y el grupo de la URL (?categoria=, ?grupo=). Cambiar de enlace
+ * (p. ej. desde el pie de página) monta un catálogo nuevo con esa selección.
+ */
+export default function CatalogClient() {
+  const searchParams = useSearchParams();
+  const categoria = searchParams.get("categoria") ?? undefined;
+  const grupo = searchParams.get("grupo") ?? undefined;
+  return <Catalog key={`${categoria ?? ""}|${grupo ?? ""}`} initialCategory={categoria} initialGroup={grupo} />;
+}
+
+function Catalog({
   initialCategory,
   initialGroup,
 }: {

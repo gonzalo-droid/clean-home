@@ -13,6 +13,7 @@ import {
 import HeroOrder from "@/components/HeroOrder";
 import ProductCard from "@/components/ProductCard";
 import { formatPrice } from "@/lib/format";
+import { asset } from "@/lib/site";
 import { ChatIcon, ClockIcon, TagIcon, TruckIcon } from "@/components/icons";
 
 export const metadata: Metadata = {
@@ -85,7 +86,7 @@ export default function HomePage() {
                 <p className="mt-1.5 text-xs font-bold tabular-nums text-gris">{productsInGroup(group.id).length} productos</p>
               </div>
               <div className="relative h-20 w-24 self-end sm:h-24 sm:w-28">
-                <Image src={group.image} alt="" fill sizes="112px" className="object-contain" />
+                <Image src={asset(group.image)} alt="" fill sizes="112px" className="object-contain" />
               </div>
             </Link>
           ))}
