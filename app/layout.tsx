@@ -7,14 +7,13 @@ import Footer from "@/components/Footer";
 import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 import Toast from "@/components/Toast";
 import OrderBar from "@/components/OrderBar";
+import { SITE_URL } from "@/lib/site";
 
 // Una sola familia: Archivo en ancho normal para leer y estrecho (font-display) para títulos y precios.
 const archivo = Archivo({ subsets: ["latin"], axes: ["wdth"], variable: "--font-archivo" });
 
-const SITE_URL = "https://clean-home.example.com";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL(`${SITE_URL}/`),
   title: {
     default: "Clean Home | Productos de limpieza",
     template: "%s | Clean Home",

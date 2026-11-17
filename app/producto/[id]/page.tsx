@@ -19,6 +19,7 @@ import Carousel from "@/components/Carousel";
 import ProductCard from "@/components/ProductCard";
 import ProductImage from "@/components/ProductImage";
 import { formatPrice } from "@/lib/format";
+import { absoluteUrl } from "@/lib/site";
 import { ClockIcon, TagIcon, TruckIcon } from "@/components/icons";
 
 export function generateStaticParams() {
@@ -32,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return {
     title: `${product.name} ${product.presentation}`,
     description: `${product.name} (${product.presentation}) a ${formatPrice(product.price)}. Pídelo por WhatsApp con envío a todo el Perú.`,
-    openGraph: product.image ? { images: [product.image] } : undefined,
+    openGraph: product.image ? { images: [absoluteUrl(product.image)] } : undefined,
   };
 }
 
@@ -51,7 +52,7 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
-    image: product.image ?? undefined,
+    image: product.image ? absoluteUrl(product.image) : undefined,
     description: `${product.name} - ${product.presentation}`,
     offers: { "@type": "Offer", price: product.price, priceCurrency: "PEN", availability: "https://schema.org/InStock" },
   };

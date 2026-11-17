@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { asset } from "@/lib/site";
 import { BottleIcon } from "./icons";
 
 export default function ProductImage({
@@ -21,5 +22,5 @@ export default function ProductImage({
       </div>
     );
   }
-  return <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className={`object-contain ${padding}`} />;
+  return <Image src={asset(src)} alt={alt} fill sizes={sizes} priority={priority} className={`object-contain ${padding}`} />;
 }
